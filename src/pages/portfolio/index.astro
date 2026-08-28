@@ -1,12 +1,16 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import { categoryMeta, getPortfolioEntries, findDefaultCover } from '../../lib/portfolio';
+import { getCollection } from 'astro:content';
+import { categoryMeta, findDefaultCover } from '../../lib/portfolio';
 
-const entries = getPortfolioEntries();
+const entries = (await getCollection('portfolio', ({ data }) => data.draft !== true))
+  .sort((a, b) => String(b.data.date || '').localeCompare(String(a.data.date || '')));
+
 const cards = entries.map((entry) => ({
-  ...entry,
-  category: entry.frontmatter.category || 'corporate-communications',
-  cover: findDefaultCover(entry.slug, entry.frontmatter.cover),
+  slug: entry.id.replace(/\.md$/, ''),
+  frontmatter: entry.data,
+  category: entry.data.category || 'corporate-communications',
+  cover: findDefaultCover(entry.id.replace(/\.md$/, ''), entry.data.cover),
 }));
 ---
 <BaseLayout title="Portfolio | Siqi Chen">

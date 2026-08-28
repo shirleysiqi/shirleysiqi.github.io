@@ -1,21 +1,20 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import { categoryMeta, findDefaultCover, getGallery, normalizeCoverage, slugFromPath } from '../../lib/portfolio';
+import { getCollection, render } from 'astro:content';
+import { categoryMeta, findDefaultCover, getGallery, normalizeCoverage } from '../../lib/portfolio';
 
-const modules = import.meta.glob('../../content/portfolio/*.md', { eager: true }) as Record<string, any>;
-
-export function getStaticPaths() {
-  return Object.entries(modules)
-    .filter(([, mod]) => !mod.frontmatter?.draft)
-    .map(([filePath]) => ({ params: { slug: slugFromPath(filePath) } }));
+export async function getStaticPaths() {
+  const entries = await getCollection('portfolio', ({ data }) => data.draft !== true);
+  return entries.map((entry) => ({
+    params: { slug: entry.id.replace(/\.md$/, '') },
+    props: { entry },
+  }));
 }
 
-const slug = Astro.params.slug || '';
-const pair = Object.entries(modules).find(([filePath]) => slugFromPath(filePath) === slug);
-const mod = pair?.[1];
-if (!mod) throw new Error(`Portfolio entry not found: ${slug}`);
-const fm = mod.frontmatter || {};
-const Content = mod.Content;
+const { entry } = Astro.props;
+const slug = entry.id.replace(/\.md$/, '');
+const fm = entry.data || {};
+const { Content } = await render(entry);
 const category = fm.category || 'corporate-communications';
 const cat = categoryMeta[category] || categoryMeta['corporate-communications'];
 const cover = findDefaultCover(slug, fm.cover);
@@ -55,7 +54,7 @@ const scopeZh = Array.isArray(fm.scopeZh) ? fm.scopeZh : scope;
     <article class="case-story prose-card">
       <p class="eyebrow dark" data-en="PROJECT STORY" data-zh="项目故事">PROJECT STORY</p>
       {fm.story && <p class="lead-copy" data-en={fm.story} data-zh={fm.storyZh || fm.story}>{fm.story}</p>}
-      {Content && <div class="markdown-body"><Content /></div>}
+      <div class="markdown-body"><Content /></div>
     </article>
 
     {(highlights.length > 0 || (category === 'media-event' && scope.length > 0)) && <aside class="case-side-panel">

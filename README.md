@@ -38,3 +38,7 @@ Workflow: `.github/workflows/deploy.yml`
 npm install
 npm run dev
 ```
+
+## V5.1 build fix
+
+This version uses Astro 5's official Content Collections API (`src/content.config.ts`, `getCollection()`, and `render()`) for portfolio routes. This replaces the earlier `import.meta.glob()` implementation that could fail in `getStaticPaths()` with `modules is not defined` during GitHub Actions builds.
