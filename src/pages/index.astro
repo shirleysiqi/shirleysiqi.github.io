@@ -62,6 +62,17 @@ const works = [
     </div>
   </section>
 
+  <section class="wide-container portfolio-focus-home">
+    <div class="section-title-row">
+      <div><p class="eyebrow dark" data-en="PORTFOLIO FOCUS" data-zh="作品集重点">PORTFOLIO FOCUS</p><h2 data-en="Explore by professional theme" data-zh="按专业主题浏览">Explore by professional theme</h2></div>
+      <a class="text-link" href="/portfolio" data-en="View full portfolio →" data-zh="查看完整作品集 →">View full portfolio →</a>
+    </div>
+    <div class="portfolio-focus-grid">
+      <a href="/portfolio?category=esg" class="focus-card focus-esg"><span>ESG</span><h3 data-en="ESG & Corporate Engagement" data-zh="ESG与企业参与">ESG & Corporate Engagement</h3><p data-en="Activity stories, event photography and engagement highlights — without forcing a separate 'My Role' section." data-zh="通过活动故事、现场图片和参与亮点展示ESG项目，无需单独强调“My Role”。">Activity stories, event photography and engagement highlights — without forcing a separate 'My Role' section.</p><b data-en="Explore ESG work →" data-zh="浏览ESG项目 →">Explore ESG work →</b></a>
+      <a href="/portfolio?category=media-event" class="focus-card focus-media"><span>MEDIA</span><h3 data-en="Media Relations & Event Coverage" data-zh="媒体关系与活动传播">Media Relations & Event Coverage</h3><p data-en="Event photos, media engagement and earned coverage presented with preview screenshots and original source links." data-zh="以活动照片、媒体参与、报道预览截图和原文链接呈现完整传播闭环。">Event photos, media engagement and earned coverage presented with preview screenshots and original source links.</p><b data-en="Explore media events →" data-zh="浏览媒体活动 →">Explore media events →</b></a>
+    </div>
+  </section>
+
   <section class="home-dashboard wide-container">
     <div class="home-col expertise-col">
       <div class="section-head"><h3 data-en="EXPERTISE" data-zh="专业能力">EXPERTISE</h3><a href="/expertise" data-en="View all →" data-zh="查看全部 →">View all →</a></div>
@@ -78,7 +89,7 @@ const works = [
     </div>
 
     <div class="home-col work-col">
-      <div class="section-head"><h3 data-en="FEATURED WORK" data-zh="代表作品">FEATURED WORK</h3><a href="/impact" data-en="View all →" data-zh="查看全部 →">View all →</a></div>
+      <div class="section-head"><h3 data-en="FEATURED WORK" data-zh="代表作品">FEATURED WORK</h3><a href="/portfolio" data-en="View all →" data-zh="查看全部 →">View all →</a></div>
       <div class="work-grid compact">
         {works.map((w) => <article class="work-card"><img src={w.image} alt="" loading="lazy" /><div class="work-card-body"><h4 data-en={w.title} data-zh={w.titleZh}>{w.title}</h4><p data-en={w.desc} data-zh={w.descZh}>{w.desc}</p><div class="tag-row">{w.tags.map(t=><span>{t}</span>)}</div></div></article>)}
       </div>
@@ -96,7 +107,7 @@ const works = [
 
   <section class="wide-container lower-grid">
     <div class="panel clients-panel">
-      <div class="section-head"><h3 data-en="SELECTED CLIENTS (PARTIAL)" data-zh="部分服务客户">SELECTED CLIENTS (PARTIAL)</h3><a href="/impact" data-en="View more →" data-zh="查看更多 →">View more →</a></div>
+      <div class="section-head"><h3 data-en="SELECTED CLIENTS (PARTIAL)" data-zh="部分服务客户">SELECTED CLIENTS (PARTIAL)</h3><a href="/portfolio" data-en="View more →" data-zh="查看更多 →">View more →</a></div>
       <div class="client-grid">{clients.map(c => <div class="client-chip"><strong>{c.name}</strong><span>{c.code || c.sector}</span></div>)}</div>
       <p class="disclaimer" data-en="Selected agency-side client exposure based on prior professional experience; displayed for portfolio context only." data-zh="以上为过往代理公司工作中的部分客户服务经验，仅用于职业作品集展示。">Selected agency-side client exposure based on prior professional experience; displayed for portfolio context only.</p>
     </div>

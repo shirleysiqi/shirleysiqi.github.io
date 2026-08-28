@@ -1,0 +1,100 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { categoryMeta, getPortfolioEntries, findDefaultCover } from '../../lib/portfolio';
+
+const entries = getPortfolioEntries();
+const cards = entries.map((entry) => ({
+  ...entry,
+  category: entry.frontmatter.category || 'corporate-communications',
+  cover: findDefaultCover(entry.slug, entry.frontmatter.cover),
+}));
+---
+<BaseLayout title="Portfolio | Siqi Chen">
+  <section class="page-hero portfolio-hero">
+    <div class="wide-container">
+      <p class="eyebrow" data-en="PROFESSIONAL PORTFOLIO" data-zh="职业作品集">PROFESSIONAL PORTFOLIO</p>
+      <h1 data-en="Selected Communications Work" data-zh="代表传讯项目">Selected Communications Work</h1>
+      <p data-en="A growing archive of selected corporate communications, ESG engagement and media-event work. Confidential materials and non-public information are intentionally excluded." data-zh="持续积累的企业传讯、ESG参与及媒体活动代表项目。涉及内部机密及非公开资料的内容均不展示。">A growing archive of selected corporate communications, ESG engagement and media-event work. Confidential materials and non-public information are intentionally excluded.</p>
+    </div>
+  </section>
+
+  <section class="wide-container portfolio-intro-grid">
+    <a class="portfolio-module corporate" href="/portfolio?category=corporate-communications">
+      <span>01</span><h2 data-en="Corporate Communications" data-zh="企业传讯">Corporate Communications</h2>
+      <p data-en="Corporate messaging, digital communications, publications, branding and stakeholder-facing content." data-zh="企业信息、数字传播、企业刊物、品牌及面向持份者的传讯内容。">Corporate messaging, digital communications, publications, branding and stakeholder-facing content.</p>
+    </a>
+    <a class="portfolio-module esg" href="/portfolio?category=esg">
+      <span>02</span><h2 data-en="ESG & Corporate Engagement" data-zh="ESG与企业参与">ESG & Corporate Engagement</h2>
+      <p data-en="Selected ESG initiatives presented through the activity story, visual gallery, engagement highlights and communications outcomes." data-zh="以活动故事、现场图片、参与亮点及传播成果展示代表性ESG项目。">Selected ESG initiatives presented through the activity story, visual gallery, engagement highlights and communications outcomes.</p>
+    </a>
+    <a class="portfolio-module media" href="/portfolio?category=media-event">
+      <span>03</span><h2 data-en="Media Relations & Event Coverage" data-zh="媒体关系与活动传播">Media Relations & Event Coverage</h2>
+      <p data-en="Events, media engagement, on-site photography and earned coverage, with source links where available." data-zh="展示活动现场、媒体沟通、本人工作照片及后续媒体报道，并在可用时提供原文链接。">Events, media engagement, on-site photography and earned coverage, with source links where available.</p>
+    </a>
+  </section>
+
+  <section class="wide-container portfolio-browser">
+    <div class="portfolio-toolbar">
+      <div>
+        <p class="eyebrow dark" data-en="BROWSE PROJECTS" data-zh="浏览项目">BROWSE PROJECTS</p>
+        <h2 data-en="Portfolio Archive" data-zh="作品档案">Portfolio Archive</h2>
+      </div>
+      <div class="portfolio-filters" role="group" aria-label="Portfolio filters">
+        <button class="filter-btn active" data-filter="all" data-en="All" data-zh="全部">All</button>
+        <button class="filter-btn" data-filter="corporate-communications" data-en="Corporate Communications" data-zh="企业传讯">Corporate Communications</button>
+        <button class="filter-btn" data-filter="esg" data-en="ESG" data-zh="ESG">ESG</button>
+        <button class="filter-btn" data-filter="media-event" data-en="Media & Events" data-zh="媒体与活动">Media & Events</button>
+      </div>
+    </div>
+
+    {cards.length ? (
+      <div class="portfolio-card-grid" id="portfolio-grid">
+        {cards.map((item) => {
+          const fm = item.frontmatter;
+          const cat = categoryMeta[item.category] || categoryMeta['corporate-communications'];
+          return (
+            <article class="portfolio-card" data-category={item.category}>
+              <a href={`/portfolio/${item.slug}`} class="portfolio-card-image">
+                {item.cover ? <img src={item.cover} alt={fm.title || ''} loading="lazy" /> : <div class="portfolio-image-placeholder"><span>{cat.short}</span></div>}
+                <span class="portfolio-category" data-en={cat.short} data-zh={cat.shortZh}>{cat.short}</span>
+              </a>
+              <div class="portfolio-card-body">
+                <div class="portfolio-meta"><span>{fm.company || ''}</span><time>{fm.dateLabel || fm.date || ''}</time></div>
+                <h3><a href={`/portfolio/${item.slug}`} data-en={fm.title || ''} data-zh={fm.titleZh || fm.title || ''}>{fm.title || ''}</a></h3>
+                <p data-en={fm.summary || ''} data-zh={fm.summaryZh || fm.summary || ''}>{fm.summary || ''}</p>
+                <a class="text-link" href={`/portfolio/${item.slug}`} data-en="View case study →" data-zh="查看项目 →">View case study →</a>
+              </div>
+            </article>
+          );
+        })}
+      </div>
+    ) : (
+      <div class="portfolio-empty">
+        <h3 data-en="Your portfolio is ready for content." data-zh="作品集框架已准备好。">Your portfolio is ready for content.</h3>
+        <p data-en="Copy a template from /templates into /src/content/portfolio, upload project images to /public/portfolio/[project-slug], then commit. The new case study will appear automatically." data-zh="把 /templates 中的模板复制到 /src/content/portfolio，并把项目图片上传至 /public/portfolio/[项目slug]，提交后新项目会自动显示。">Copy a template from /templates into /src/content/portfolio, upload project images to /public/portfolio/[project-slug], then commit. The new case study will appear automatically.</p>
+      </div>
+    )}
+  </section>
+
+  <script is:inline>
+    (() => {
+      const buttons = [...document.querySelectorAll('.filter-btn')];
+      const cards = [...document.querySelectorAll('.portfolio-card')];
+      const setFilter = (filter) => {
+        buttons.forEach((b) => b.classList.toggle('active', b.dataset.filter === filter));
+        cards.forEach((card) => {
+          card.hidden = filter !== 'all' && card.dataset.category !== filter;
+        });
+      };
+      const initial = new URLSearchParams(location.search).get('category') || 'all';
+      setFilter(initial);
+      buttons.forEach((button) => button.addEventListener('click', () => {
+        const filter = button.dataset.filter || 'all';
+        setFilter(filter);
+        const url = new URL(location.href);
+        if (filter === 'all') url.searchParams.delete('category'); else url.searchParams.set('category', filter);
+        history.replaceState({}, '', url);
+      }));
+    })();
+  </script>
+</BaseLayout>

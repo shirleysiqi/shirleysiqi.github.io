@@ -1,42 +1,40 @@
-# Siqi Chen — Corporate Communications Portfolio (V4)
+# Siqi Chen — Corporate Communications Portfolio V5
 
-Astro + GitHub Pages portfolio for Siqi Chen / 陳思琦.
+Astro + GitHub Pages portfolio, redesigned as a **content-driven professional archive**.
 
-## Included
-- Hong Kong financial-district hero visual
-- Professional portrait
-- English / Traditional Chinese toggle
-- Corporate Communications / Financial PR / IR positioning
-- Selected client exposure
-- Media coverage landscape
-- Featured work / event portfolio cards
-- Career timeline
-- LinkedIn button (placeholder URL; replace before publishing)
-- GitHub Actions deployment workflow
+## V5 key feature
 
-## Before publishing
-Edit `src/config.ts` and replace:
+New ESG / media-event / corporate-communications case studies are created with Markdown files and image folders. Normal updates do not require editing Astro page code.
 
-```ts
-linkedin: 'https://www.linkedin.com/in/YOUR-LINKEDIN-SLUG/'
-```
+Start with `CONTENT_GUIDE.md`.
 
-with the real LinkedIn URL.
+## Add content
 
-## GitHub Pages
+Templates:
+
+- `templates/ESG-TEMPLATE.md`
+- `templates/MEDIA-EVENT-TEMPLATE.md`
+- `templates/CORPORATE-COMMS-TEMPLATE.md`
+
+Published project files go in:
+
+`src/content/portfolio/`
+
+Images go in:
+
+`public/portfolio/[same-project-slug]/`
+
+## Deployment
+
 Repository: `shirleysiqi.github.io`
 
-In GitHub: **Settings → Pages → Source → GitHub Actions**.
+GitHub Pages source: **GitHub Actions**
 
-Every push to `main` will deploy automatically.
+Workflow: `.github/workflows/deploy.yml`
 
-## Local preview
+## Local development
+
 ```bash
 npm install
 npm run dev
-```
-
-## Build
-```bash
-npm run build
 ```

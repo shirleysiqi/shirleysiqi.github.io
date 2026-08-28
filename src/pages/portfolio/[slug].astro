@@ -1,0 +1,99 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { categoryMeta, findDefaultCover, getGallery, normalizeCoverage, slugFromPath } from '../../lib/portfolio';
+
+const modules = import.meta.glob('../../content/portfolio/*.md', { eager: true }) as Record<string, any>;
+
+export function getStaticPaths() {
+  return Object.entries(modules)
+    .filter(([, mod]) => !mod.frontmatter?.draft)
+    .map(([filePath]) => ({ params: { slug: slugFromPath(filePath) } }));
+}
+
+const slug = Astro.params.slug || '';
+const pair = Object.entries(modules).find(([filePath]) => slugFromPath(filePath) === slug);
+const mod = pair?.[1];
+if (!mod) throw new Error(`Portfolio entry not found: ${slug}`);
+const fm = mod.frontmatter || {};
+const Content = mod.Content;
+const category = fm.category || 'corporate-communications';
+const cat = categoryMeta[category] || categoryMeta['corporate-communications'];
+const cover = findDefaultCover(slug, fm.cover);
+const gallery = getGallery(slug, fm.gallery);
+const coverage = normalizeCoverage(slug, fm.coverage);
+const metrics = Array.isArray(fm.metrics) ? fm.metrics : [];
+const highlights = Array.isArray(fm.highlights) ? fm.highlights : [];
+const scope = Array.isArray(fm.scope) ? fm.scope : [];
+const scopeZh = Array.isArray(fm.scopeZh) ? fm.scopeZh : scope;
+---
+<BaseLayout title={`${fm.title || 'Portfolio'} | Siqi Chen`} description={fm.summary || ''}>
+  <section class="case-hero">
+    <div class="wide-container case-hero-grid">
+      <div class="case-hero-copy">
+        <a href="/portfolio" class="back-link" data-en="← Portfolio" data-zh="← 返回作品集">← Portfolio</a>
+        <p class="eyebrow" data-en={cat.en} data-zh={cat.zh}>{cat.en}</p>
+        <h1 data-en={fm.title || ''} data-zh={fm.titleZh || fm.title || ''}>{fm.title || ''}</h1>
+        <p class="case-summary" data-en={fm.summary || ''} data-zh={fm.summaryZh || fm.summary || ''}>{fm.summary || ''}</p>
+        <div class="case-facts">
+          {fm.company && <span><b data-en="Organisation" data-zh="机构">Organisation</b>{fm.company}</span>}
+          {(fm.dateLabel || fm.date) && <span><b data-en="Date" data-zh="日期">Date</b><i data-en={fm.dateLabel || fm.date} data-zh={fm.dateLabelZh || fm.dateLabel || fm.date}>{fm.dateLabel || fm.date}</i></span>}
+          {fm.location && <span><b data-en="Location" data-zh="地点">Location</b>{fm.location}</span>}
+        </div>
+        {Array.isArray(fm.tags) && fm.tags.length > 0 && <div class="case-tags">{fm.tags.map((tag, i) => <span data-en={tag} data-zh={(fm.tagsZh || fm.tags)[i] || tag}>{tag}</span>)}</div>}
+      </div>
+      <div class="case-cover">
+        {cover ? <img src={cover} alt={fm.title || ''} /> : <div class="portfolio-image-placeholder large"><span>{cat.short}</span></div>}
+      </div>
+    </div>
+  </section>
+
+  {metrics.length > 0 && <section class="wide-container case-metrics">
+    {metrics.map((metric) => <div><strong>{metric.value}</strong><span data-en={metric.label} data-zh={metric.labelZh || metric.label}>{metric.label}</span></div>)}
+  </section>}
+
+  <section class="wide-container case-story-grid">
+    <article class="case-story prose-card">
+      <p class="eyebrow dark" data-en="PROJECT STORY" data-zh="项目故事">PROJECT STORY</p>
+      {fm.story && <p class="lead-copy" data-en={fm.story} data-zh={fm.storyZh || fm.story}>{fm.story}</p>}
+      {Content && <div class="markdown-body"><Content /></div>}
+    </article>
+
+    {(highlights.length > 0 || (category === 'media-event' && scope.length > 0)) && <aside class="case-side-panel">
+      {category === 'media-event' && scope.length > 0 && <div class="side-block">
+        <h3 data-en="Communications Scope" data-zh="传讯范围">Communications Scope</h3>
+        <div class="scope-tags">{scope.map((item, i) => <span data-en={item} data-zh={scopeZh[i] || item}>{item}</span>)}</div>
+      </div>}
+      {highlights.length > 0 && <div class="side-block">
+        <h3 data-en="Highlights" data-zh="活动亮点">Highlights</h3>
+        {highlights.map((item) => <div class="highlight-item"><strong data-en={item.title} data-zh={item.titleZh || item.title}>{item.title}</strong>{item.text && <p data-en={item.text} data-zh={item.textZh || item.text}>{item.text}</p>}</div>)}
+      </div>}
+    </aside>}
+  </section>
+
+  {gallery.length > 0 && <section class="wide-container case-gallery-section">
+    <div class="section-title-row"><div><p class="eyebrow dark" data-en="EVENT GALLERY" data-zh="活动相册">EVENT GALLERY</p><h2 data-en="Selected Photos" data-zh="精选照片">Selected Photos</h2></div><p data-en="Professional and event imagery only." data-zh="仅展示职业及活动相关图片。">Professional and event imagery only.</p></div>
+    <div class="case-gallery">{gallery.map((photo) => <figure><img src={photo.src} alt={photo.caption || fm.title || ''} loading="lazy" />{photo.caption && <figcaption data-en={photo.caption} data-zh={photo.captionZh || photo.caption}>{photo.caption}</figcaption>}</figure>)}</div>
+  </section>}
+
+  {coverage.length > 0 && <section class="coverage-section">
+    <div class="wide-container">
+      <div class="section-title-row inverse"><div><p class="eyebrow" data-en="EARNED MEDIA COVERAGE" data-zh="媒体报道">EARNED MEDIA COVERAGE</p><h2 data-en="Selected Coverage" data-zh="精选报道">Selected Coverage</h2></div><p data-en="Preview screenshots are shown for portfolio context; original source links are provided where available." data-zh="报道截图仅用于作品集预览；如有可用原文链接，则同时提供来源链接。">Preview screenshots are shown for portfolio context; original source links are provided where available.</p></div>
+      <div class="coverage-grid">
+        {coverage.map((item) => <article class="coverage-card">
+          <div class="coverage-preview">{item.image ? <img src={item.image} alt={`${item.media} coverage preview`} loading="lazy" /> : <div class="coverage-placeholder">{item.media}</div>}</div>
+          <div class="coverage-body">
+            <div class="coverage-meta"><strong>{item.media}</strong>{item.date && <time>{item.date}</time>}</div>
+            <h3>{item.title}</h3>
+            {item.paywall && <span class="paywall-badge" data-en="Subscription may be required" data-zh="可能需要订阅">Subscription may be required</span>}
+            {item.note && <p class="coverage-note" data-en={item.note} data-zh={item.noteZh || item.note}>{item.note}</p>}
+            {item.url && <a class="coverage-link" href={item.url} target="_blank" rel="noreferrer" data-en="Original Source ↗" data-zh="原文链接 ↗">Original Source ↗</a>}
+          </div>
+        </article>)}
+      </div>
+      <div class="copyright-note">
+        <strong data-en="Publication note" data-zh="发布说明">Publication note</strong>
+        <p data-en="Use cropped preview images or monitoring thumbnails rather than publishing full paywalled articles. Confirm that any monitoring-provider clipping is licensed for public display. Copyright remains with the respective publishers." data-zh="建议仅展示裁剪后的报道预览或监测缩略图，不公开发布完整付费文章。若使用监测机构的剪报，请先确认其授权允许公开展示。版权归相关媒体机构所有。">Use cropped preview images or monitoring thumbnails rather than publishing full paywalled articles. Confirm that any monitoring-provider clipping is licensed for public display. Copyright remains with the respective publishers.</p>
+      </div>
+    </div>
+  </section>}
+</BaseLayout>

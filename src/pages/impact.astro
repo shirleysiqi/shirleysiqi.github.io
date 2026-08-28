@@ -1,16 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { clients } from '../config';
-const cases = [
- ['Corporate Communications & Media Relations','企业传讯与媒体关系','Managing bilingual corporate communications, media engagement, corporate website content, newsletters and external information updates for a Hong Kong financial institution.','为香港金融机构管理双语企业传讯、媒体沟通、企业网站内容、季度通讯及对外信息更新。'],
- ['Financial PR & IR for Listed Companies','上市公司财经公关与投资者关系','Supported around 15 listed companies across financial PR, IR, media relations, corporate events and stakeholder communications.','曾为约15家上市公司提供财经公关、投资者关系、媒体关系、企业活动及持份者沟通支持。'],
- ['Digital Communications & Corporate Content','数字传讯与企业内容','Managed social media updates, corporate web content and corporate publications to maintain timely and consistent messaging.','管理社交媒体、企业网站内容及企业刊物，以确保信息及时、一致并符合品牌表达。'],
- ['ESG & Stakeholder Engagement','ESG与持份者沟通','Planned and executed ESG initiatives, public engagement activities and stakeholder communication programmes.','策划及执行ESG项目、公众参与活动及持份者沟通计划。'],
- ['Issues & Crisis Communications','议题与危机传讯','Supported public-opinion monitoring, enquiry management and crisis communication planning in stakeholder-sensitive environments.','在持份者敏感环境中参与舆情监测、公众查询处理及危机传讯规划。']
-];
 ---
-<BaseLayout title="Selected Work | Siqi Chen">
-  <section class="page-hero"><div class="wide-container"><p class="eyebrow" data-en="PORTFOLIO" data-zh="职业作品集">PORTFOLIO</p><h1 data-en="Selected Work" data-zh="代表作品">Selected Work</h1><p data-en="Selected experience is presented at a portfolio level. Confidential internal materials, client-sensitive information and non-public metrics are intentionally excluded." data-zh="以下以职业作品集方式呈现代表经验；涉及内部机密、客户敏感资料及非公开指标的内容均不展示。">Selected experience is presented at a portfolio level. Confidential internal materials, client-sensitive information and non-public metrics are intentionally excluded.</p></div></section>
-  <section class="wide-container case-grid">{cases.map(([en,zh,desc,descZh],i)=><article class="case-card"><span>0{i+1}</span><h2 data-en={en} data-zh={zh}>{en}</h2><p data-en={desc} data-zh={descZh}>{desc}</p></article>)}</section>
-  <section class="wide-container selected-clients-section"><div class="section-head"><h2 data-en="Selected Client Exposure" data-zh="部分客户服务经验">Selected Client Exposure</h2></div><div class="client-grid large">{clients.map(c=><div class="client-chip"><strong>{c.name}</strong><span>{c.code}</span><em>{c.sector}</em></div>)}</div><p class="disclaimer" data-en="Client names are drawn from prior agency-side experience listed in the CV and shown only as selected professional exposure." data-zh="客户名称来自简历所列的过往代理公司服务经验，仅作为部分职业项目经验展示。">Client names are drawn from prior agency-side experience listed in the CV and shown only as selected professional exposure.</p></section>
+<BaseLayout title="Portfolio | Siqi Chen">
+  <section class="page-hero"><div class="wide-container"><p class="eyebrow">PORTFOLIO</p><h1 data-en="Portfolio has moved" data-zh="作品集页面已升级">Portfolio has moved</h1><p data-en="Selected Work is now organised as a content-driven portfolio covering corporate communications, ESG engagement and media relations & events." data-zh="代表作品现已升级为内容驱动型作品集，涵盖企业传讯、ESG参与以及媒体关系与活动传播。">Selected Work is now organised as a content-driven portfolio covering corporate communications, ESG engagement and media relations & events.</p><a class="btn-gold" href="/portfolio" data-en="Open Portfolio →" data-zh="进入作品集 →">Open Portfolio →</a></div></section>
 </BaseLayout>
