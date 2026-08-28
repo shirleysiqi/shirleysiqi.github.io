@@ -1,9 +1,9 @@
 ---
 import '../styles/global.css';
-const { title = 'Shirley Siqi | Compliance & Controls', description = 'Professional portfolio in compliance, controls and governance.' } = Astro.props;
+const { title = 'Siqi Chen | Corporate Communications & Financial PR', description = 'Hong Kong-based corporate communications professional with experience in financial PR, listed-company communications, media relations, ESG and stakeholder engagement.' } = Astro.props;
 const path = Astro.url.pathname;
 const nav = [
-  ['Home','/'],['About','/about'],['Expertise','/expertise'],['Impact','/impact'],['Career','/career'],['Insights','/insights'],['Contact','/contact']
+  ['Home','/'],['About','/about'],['Expertise','/expertise'],['Selected Work','/impact'],['Career','/career'],['Insights','/insights'],['Contact','/contact']
 ];
 ---
 <!doctype html>
@@ -18,20 +18,18 @@ const nav = [
   <body>
     <header class="site-header">
       <div class="container nav-wrap">
-        <a href="/" class="brand" aria-label="Home">SS</a>
+        <a href="/" class="brand" aria-label="Home">SC</a>
         <nav class="nav">
           {nav.map(([label, href]) => <a class:list={[path === href && 'active']} href={href}>{label}</a>)}
         </nav>
-        <a class="btn btn-outline small" href="/cv/shirley-siqi-cv.pdf">Download CV</a>
+        <a class="btn btn-outline small" href="/cv/siqi-chen-cv.pdf">Download CV</a>
       </div>
     </header>
-    <main>
-      <slot />
-    </main>
+    <main><slot /></main>
     <footer class="site-footer">
       <div class="container footer-grid">
-        <div><strong>Shirley Siqi</strong><p>Compliance · Controls · Governance</p></div>
-        <div><p>Hong Kong</p><p>© {new Date().getFullYear()} Shirley Siqi</p></div>
+        <div><strong>Siqi Chen 陳思琦</strong><p>Corporate Communications · Financial PR · Media Relations</p></div>
+        <div><p>Hong Kong</p><p>© {new Date().getFullYear()} Siqi Chen</p></div>
       </div>
     </footer>
   </body>

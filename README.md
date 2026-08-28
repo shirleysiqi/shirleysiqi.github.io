@@ -1,39 +1,22 @@
-# Shirley Siqi — Compliance & Controls Executive Portfolio
+# Siqi Chen — Corporate Communications Portfolio
 
-Astro static site configured for GitHub Pages at:
+Astro static portfolio site designed for GitHub Pages.
 
-https://shirleysiqi.github.io
+## Positioning
 
-## Local preview
+Corporate Communications · Financial PR · Investor Relations · Media Relations · ESG · Stakeholder Engagement
+
+## Local development
 
 ```bash
 npm install
 npm run dev
 ```
 
-## Build
+## Deployment
 
-```bash
-npm run build
-```
+The repository is configured for `https://shirleysiqi.github.io` and includes `.github/workflows/deploy.yml` for GitHub Pages deployment.
 
-## GitHub Pages setup
+## Editing
 
-1. Repository name: `shirleysiqi.github.io`
-2. Repository visibility: Public
-3. Settings → Pages → Source → GitHub Actions
-4. Push this project to the `main` branch
-5. `.github/workflows/deploy.yml` will build and deploy automatically
-
-## Replace before public launch
-
-- Name and job title if needed
-- Career dates and employers
-- Metrics (10+, 15+, etc.)
-- Email and LinkedIn link
-- Project examples
-- Replace `/public/cv/shirley-siqi-cv.pdf` with a public-safe CV
-
-## Confidentiality
-
-Do not publish confidential employer or client information, internal documents, regulatory correspondence, sensitive metrics or screenshots.
+Main content is in `src/pages/`. Global styling is in `src/styles/global.css`. Replace or expand portfolio content only with public-safe, non-confidential material.

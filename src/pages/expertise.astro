@@ -1,10 +1,12 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 const groups = [
-['Regulatory Compliance',['Regulatory advisory','Regulatory change','Licensing & registration','Regulatory engagement','Policies & procedures','Regulatory risk assessment']],
-['Conduct & Business Risk',['Conduct risk','Conflicts of interest','Information barriers','Personal account dealing','Outside business interests','Business advisory']],
-['Controls & Governance',['Risk & control framework','RCSA','Control testing','Issue management','Governance committees','Management information']],
-['Transformation',['Compliance automation','RegTech','Data analytics','Workflow redesign','Dashboards','AI-enabled compliance']]
+['Corporate Communications',['Corporate messaging','Bilingual communications','Press releases','Corporate publications','Corporate website','Newsletters']],
+['Financial PR & IR',['Listed-company communications','Investor-relations support','Financial PR','Market communications','Corporate events','Networking events']],
+['Media Relations',['Media engagement','Media pitching','Interview coordination','Media-list management','Media monitoring','Public-opinion monitoring']],
+['Stakeholder Engagement',['Stakeholder communications','Public consultation','Public enquiries','Community relations','Issue management','Crisis communications']],
+['Brand & Digital',['Brand management','Social media','Corporate identity','Digital content','Corporate collateral','Brand updates']],
+['ESG & Events',['ESG communications','Corporate events','Press conferences','Venue coordination','Stakeholder programmes','Event materials']]
 ];
 ---
-<BaseLayout title="Expertise | Shirley Siqi"><section class="page-hero"><div class="container"><div class="eyebrow">Expertise</div><h1>Capability Map</h1><p>How I frame my experience across compliance, controls, business risk and transformation.</p></div></section><section class="section"><div class="container grid-4">{groups.map(([title,items]) => <div class="card"><h3>{title}</h3><ul class="clean">{items.map((i)=> <li>{i}</li>)}</ul></div>)}</div></section><section class="section alt"><div class="container"><div class="kicker">Leadership</div><h2>Leadership & Soft Skills</h2><p class="section-lead">Stakeholder management · Team leadership · Change management · Communication · Problem solving</p></div></section></BaseLayout>
+<BaseLayout title="Expertise | Siqi Chen"><section class="page-hero"><div class="container"><div class="eyebrow">Expertise</div><h1>Capability Map</h1><p>Experience spanning corporate communications, financial PR, media relations, stakeholder engagement, branding and ESG.</p></div></section><section class="section"><div class="container grid-3">{groups.map(([title,items]) => <div class="card"><h3>{title}</h3><ul class="clean">{items.map((i)=> <li>{i}</li>)}</ul></div>)}</div></section><section class="section alt"><div class="container"><div class="kicker">Communication Skills</div><h2>Cross-functional & Multilingual</h2><p class="section-lead">English · Mandarin · Cantonese · Taiwanese · Stakeholder communication · Presentation · Visual communication</p></div></section></BaseLayout>
