@@ -1,0 +1,9 @@
+---
+import '../styles/global.css';
+const { title = 'Your Name | Compliance & Controls' } = Astro.props;
+---
+<!doctype html><html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width"/><meta name="description" content="Compliance, Controls and Governance portfolio based in Hong Kong."/><title>{title}</title></head><body>
+<nav class="nav"><div class="wrap navin"><a class="brand" href="/">YN</a><div class="links"><a href="/#about">About</a><a href="/#expertise">Expertise</a><a href="/#impact">Impact</a><a href="/#career">Career</a><a href="/#insights">Insights</a><a href="/#contact">Contact</a></div></div></nav>
+<slot/>
+<footer class="footer"><div class="wrap footin"><div>© 2026 Your Name. Professional portfolio.</div><div class="mini">Hong Kong · Compliance · Controls · Governance</div></div></footer>
+</body></html>
