@@ -1,0 +1,9 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { mediaGroups } from '../config';
+---
+<BaseLayout title="Media Coverage | Siqi Chen">
+  <section class="page-hero"><div class="wide-container"><p class="eyebrow" data-en="MEDIA LANDSCAPE" data-zh="媒体版图">MEDIA LANDSCAPE</p><h1 data-en="Media Coverage & Partnership Exposure" data-zh="媒体资源覆盖与合作经验">Media Coverage & Partnership Exposure</h1><p data-en="The current ECO-CC team overview states 19+ media outlets across six categories, covering Hong Kong and Greater China financial, business and mainstream channels." data-zh="现有ECO-CC团队媒体资源总览标注覆盖6大类19+家媒体，覆盖香港及大中华区主流财经、综合媒体渠道。">The current ECO-CC team overview states 19+ media outlets across six categories, covering Hong Kong and Greater China financial, business and mainstream channels.</p></div></section>
+  <section class="wide-container media-grid">{mediaGroups.map((g,i)=><article class="media-group"><span class="cap-index">0{i+1}</span><h2 data-en={g.en} data-zh={g.zh}>{g.en}</h2><ul>{g.outlets.map(o=><li>{o}</li>)}</ul></article>)}</section>
+  <section class="wide-container note-block"><strong data-en="Portfolio note" data-zh="展示说明">Portfolio note</strong><p data-en="The source document describes these as ECO-CC corporate communications team media resources. Accordingly, this website presents them as media coverage / partnership exposure rather than claiming each relationship as individually owned." data-zh="源文件将上述媒体列为ECO-CC企业传讯部团队媒体资源。因此，本网站以“媒体覆盖 / 合作经验”方式展示，而不将所有关系表述为个人独立拥有。">The source document describes these as ECO-CC corporate communications team media resources. Accordingly, this website presents them as media coverage / partnership exposure rather than claiming each relationship as individually owned.</p></section>
+</BaseLayout>

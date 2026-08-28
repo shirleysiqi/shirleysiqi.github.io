@@ -1,22 +1,42 @@
-# Siqi Chen — Corporate Communications Portfolio
+# Siqi Chen — Corporate Communications Portfolio (V4)
 
-Astro static portfolio site designed for GitHub Pages.
+Astro + GitHub Pages portfolio for Siqi Chen / 陳思琦.
 
-## Positioning
+## Included
+- Hong Kong financial-district hero visual
+- Professional portrait
+- English / Traditional Chinese toggle
+- Corporate Communications / Financial PR / IR positioning
+- Selected client exposure
+- Media coverage landscape
+- Featured work / event portfolio cards
+- Career timeline
+- LinkedIn button (placeholder URL; replace before publishing)
+- GitHub Actions deployment workflow
 
-Corporate Communications · Financial PR · Investor Relations · Media Relations · ESG · Stakeholder Engagement
+## Before publishing
+Edit `src/config.ts` and replace:
 
-## Local development
+```ts
+linkedin: 'https://www.linkedin.com/in/YOUR-LINKEDIN-SLUG/'
+```
 
+with the real LinkedIn URL.
+
+## GitHub Pages
+Repository: `shirleysiqi.github.io`
+
+In GitHub: **Settings → Pages → Source → GitHub Actions**.
+
+Every push to `main` will deploy automatically.
+
+## Local preview
 ```bash
 npm install
 npm run dev
 ```
 
-## Deployment
-
-The repository is configured for `https://shirleysiqi.github.io` and includes `.github/workflows/deploy.yml` for GitHub Pages deployment.
-
-## Editing
-
-Main content is in `src/pages/`. Global styling is in `src/styles/global.css`. Replace or expand portfolio content only with public-safe, non-confidential material.
+## Build
+```bash
+npm run build
+```

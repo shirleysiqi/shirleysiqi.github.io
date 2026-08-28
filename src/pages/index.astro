@@ -1,65 +1,119 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import { clients, mediaGroups, profile } from '../config';
+const works = [
+  {
+    image: 'https://images.unsplash.com/photo-1505373877841-8d25f7d46678?auto=format&fit=crop&w=900&q=82',
+    title: 'Corporate Communications & Media Relations',
+    titleZh: '企业传讯与媒体关系',
+    desc: 'Managing bilingual corporate communications and media engagement for a leading Hong Kong financial institution.',
+    descZh: '为香港领先金融机构管理双语企业传讯、媒体关系与日常对外沟通。',
+    tags: ['Corporate Messaging', 'Media Relations', 'Monitoring']
+  },
+  {
+    image: 'https://images.unsplash.com/photo-1497366811353-6870744d04b2?auto=format&fit=crop&w=900&q=82',
+    title: 'Financial PR & IR for Listed Companies',
+    titleZh: '上市公司财经公关与投资者关系',
+    desc: 'Providing financial PR and IR solutions to around 15 Hong Kong-listed companies across multiple sectors.',
+    descZh: '曾为约15家香港上市公司提供财经公关、投资者关系、媒体与活动支持。',
+    tags: ['Financial PR', 'IR', 'Events']
+  },
+  {
+    image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=900&q=82',
+    title: 'Digital Communications & Corporate Content',
+    titleZh: '数字传讯与企业内容',
+    desc: 'Overseeing corporate website, social media, external information updates and quarterly newsletters.',
+    descZh: '负责企业网站、社交媒体、对外信息更新及季度通讯等数字内容工作。',
+    tags: ['Digital', 'Website', 'Content']
+  },
+  {
+    image: 'https://images.unsplash.com/photo-1532601224476-15c79f2f7a51?auto=format&fit=crop&w=900&q=82',
+    title: 'ESG & Stakeholder Engagement',
+    titleZh: 'ESG与持份者沟通',
+    desc: 'Planning and executing ESG initiatives, public engagement and stakeholder communication programmes.',
+    descZh: '策划并执行ESG活动、公众参与及持份者沟通项目。',
+    tags: ['ESG', 'Stakeholders', 'Events']
+  }
+];
 ---
-<BaseLayout title="Siqi Chen | Corporate Communications & Financial PR">
-  <section class="hero">
-    <div class="container hero-grid">
-      <div>
-        <div class="eyebrow">Hong Kong · Financial Services</div>
-        <h1>Siqi Chen 陳思琦</h1>
-        <h2>Corporate Communications · Financial PR · Investor Relations</h2>
-        <p>Building trusted corporate narratives and stakeholder relationships across financial markets, listed companies and public-facing organisations.</p>
-        <div style="margin-top:28px;display:flex;gap:12px;flex-wrap:wrap">
-          <a class="btn btn-primary" href="/impact">View Selected Work</a>
-          <a class="btn btn-outline" href="/contact">Contact Me</a>
-        </div>
-        <div class="metric-grid">
-          <div class="metric"><strong>15+</strong><span>Listed-company clients supported</span></div>
-          <div class="metric"><strong>3</strong><span>Professional environments</span></div>
-          <div class="metric"><strong>360°</strong><span>Communications exposure</span></div>
-          <div class="metric"><strong>HK</strong><span>Financial-market focus</span></div>
+<BaseLayout>
+  <section class="hero-home">
+    <div class="hero-overlay"></div>
+    <div class="wide-container hero-home-grid">
+      <div class="portrait-wrap"><img src="/images/siqi-chen-profile.jpg" alt="Siqi Chen" /></div>
+      <div class="hero-copy">
+        <p class="eyebrow" data-en="HONG KONG · CORPORATE COMMUNICATIONS" data-zh="香港 · 企业传讯">HONG KONG · CORPORATE COMMUNICATIONS</p>
+        <h1>Siqi Chen <span>陳思琦</span></h1>
+        <h2 data-en="Corporate Communications · Financial PR · Investor Relations" data-zh="企业传讯 · 财经公关 · 投资者关系">Corporate Communications · Financial PR · Investor Relations</h2>
+        <p class="hero-lead" data-en="Building trusted corporate narratives and stakeholder relationships across financial markets." data-zh="以专业企业叙事与持份者关系管理，连接金融市场、媒体与公众。">Building trusted corporate narratives and stakeholder relationships across financial markets.</p>
+        <div class="hero-tags">
+          <span data-en="Financial Services" data-zh="金融服务">Financial Services</span>
+          <span data-en="Listed Companies" data-zh="上市公司">Listed Companies</span>
+          <span data-en="Media Relations" data-zh="媒体关系">Media Relations</span>
+          <span>ESG</span><span data-en="Branding" data-zh="品牌管理">Branding</span>
         </div>
       </div>
-      <div class="hero-panel">
-        <div class="kicker">Professional Focus</div>
-        <p class="quote">Connecting corporate strategy with clear messaging, media engagement, stakeholder communications and reputation management.</p>
+    </div>
+    <div class="wide-container metrics-row">
+      <div><strong>15+</strong><span data-en="Listed-company clients supported" data-zh="曾服务上市公司客户">Listed-company clients supported</span></div>
+      <div><strong>19+</strong><span data-en="Media outlets in coverage overview" data-zh="媒体资源覆盖总览">Media outlets in coverage overview</span></div>
+      <div><strong>6</strong><span data-en="Media categories represented" data-zh="媒体类别覆盖">Media categories represented</span></div>
+      <div><strong>360°</strong><span data-en="Communications exposure" data-zh="全方位传讯经验">Communications exposure</span></div>
+    </div>
+  </section>
+
+  <section class="home-dashboard wide-container">
+    <div class="home-col expertise-col">
+      <div class="section-head"><h3 data-en="EXPERTISE" data-zh="专业能力">EXPERTISE</h3><a href="/expertise" data-en="View all →" data-zh="查看全部 →">View all →</a></div>
+      <div class="mini-expertise-grid">
+        {[
+          ['Corporate Communications','企业传讯','Corporate messaging, bilingual communications, press releases, corporate website and publications.'],
+          ['Financial PR & IR','财经公关与投资者关系','Supporting listed companies in financial PR, investor relations and capital markets communications.'],
+          ['Media Relations','媒体关系','Media engagement, pitching, interviews, monitoring and reputation management.'],
+          ['Stakeholder Engagement','持份者沟通','Public consultation, stakeholder communications, issue management and crisis communications.'],
+          ['Brand & Digital','品牌与数字传播','Brand management, social media, digital content and corporate identity.'],
+          ['ESG & Events','ESG与活动','ESG communications, corporate events, press conferences and stakeholder programmes.']
+        ].map(([en,zh,desc], i) => <article class="mini-expertise"><span class="num">0{i+1}</span><div><h4 data-en={en} data-zh={zh}>{en}</h4><p>{desc}</p></div></article>)}
+      </div>
+    </div>
+
+    <div class="home-col work-col">
+      <div class="section-head"><h3 data-en="FEATURED WORK" data-zh="代表作品">FEATURED WORK</h3><a href="/impact" data-en="View all →" data-zh="查看全部 →">View all →</a></div>
+      <div class="work-grid compact">
+        {works.map((w) => <article class="work-card"><img src={w.image} alt="" loading="lazy" /><div class="work-card-body"><h4 data-en={w.title} data-zh={w.titleZh}>{w.title}</h4><p data-en={w.desc} data-zh={w.descZh}>{w.desc}</p><div class="tag-row">{w.tags.map(t=><span>{t}</span>)}</div></div></article>)}
+      </div>
+    </div>
+
+    <div class="home-col career-col">
+      <div class="section-head"><h3 data-en="CAREER JOURNEY" data-zh="职业经历">CAREER JOURNEY</h3><a href="/career" data-en="View all →" data-zh="查看全部 →">View all →</a></div>
+      <div class="timeline compact">
+        <article><time>2024 – Present</time><h4>Haitong International Securities Group Limited</h4><strong>Corporate Communication · Assistant Manager</strong><p data-en="Corporate communications, media relations, bilingual content, digital channels, ESG initiatives and brand management." data-zh="负责企业传讯、媒体关系、双语内容、数字渠道、ESG活动及品牌管理。">Corporate communications, media relations, bilingual content, digital channels, ESG initiatives and brand management.</p></article>
+        <article><time>2023 – 2024</time><h4>Chun Wo Development Holdings Limited</h4><strong>Assistant Public Relation Officer</strong><p data-en="Stakeholder communications, public consultation, ESG events, issue monitoring and crisis communications." data-zh="负责持份者沟通、公众咨询、ESG活动、舆情监测及危机传讯。">Stakeholder communications, public consultation, ESG events, issue monitoring and crisis communications.</p></article>
+        <article><time>2021 – 2022</time><h4>Wonderful Sky Financial Group Limited</h4><strong>Senior PR Associate</strong><p data-en="Financial PR and IR solutions for around 15 Hong Kong-listed companies." data-zh="为约15家香港上市公司提供财经公关及投资者关系服务。">Financial PR and IR solutions for around 15 Hong Kong-listed companies.</p></article>
       </div>
     </div>
   </section>
 
-  <section class="section">
-    <div class="container">
-      <div class="section-head"><div><div class="kicker">Capabilities</div><h2>What I Do</h2></div><p class="section-lead">A cross-section of in-house, agency-side and stakeholder-facing communications experience.</p></div>
-      <div class="grid-4">
-        <div class="card"><h3>Corporate Communications</h3><p>Bilingual press releases, corporate messaging, website content, newsletters and external information updates.</p><span class="tag">Messaging</span><span class="tag">Press Releases</span><span class="tag">Publications</span></div>
-        <div class="card"><h3>Media Relations</h3><p>Media pitching, interview coordination, media-list management, monitoring and public-opinion tracking.</p><span class="tag">Media Pitch</span><span class="tag">Interviews</span><span class="tag">Monitoring</span></div>
-        <div class="card"><h3>Financial PR & IR</h3><p>Listed-company communications, investor-facing events, stakeholder engagement and market messaging support.</p><span class="tag">Listed Companies</span><span class="tag">IR</span><span class="tag">Events</span></div>
-        <div class="card"><h3>Brand, ESG & Engagement</h3><p>Brand management, social media, ESG activities, corporate events and stakeholder-facing communications.</p><span class="tag">Branding</span><span class="tag">ESG</span><span class="tag">Digital</span></div>
-      </div>
+  <section class="wide-container lower-grid">
+    <div class="panel clients-panel">
+      <div class="section-head"><h3 data-en="SELECTED CLIENTS (PARTIAL)" data-zh="部分服务客户">SELECTED CLIENTS (PARTIAL)</h3><a href="/impact" data-en="View more →" data-zh="查看更多 →">View more →</a></div>
+      <div class="client-grid">{clients.map(c => <div class="client-chip"><strong>{c.name}</strong><span>{c.code || c.sector}</span></div>)}</div>
+      <p class="disclaimer" data-en="Selected agency-side client exposure based on prior professional experience; displayed for portfolio context only." data-zh="以上为过往代理公司工作中的部分客户服务经验，仅用于职业作品集展示。">Selected agency-side client exposure based on prior professional experience; displayed for portfolio context only.</p>
+    </div>
+
+    <div class="panel media-panel">
+      <div class="section-head"><h3 data-en="MEDIA COVERAGE & PARTNERSHIP EXPOSURE" data-zh="媒体资源覆盖与合作经验">MEDIA COVERAGE & PARTNERSHIP EXPOSURE</h3><a href="/media" data-en="View full list →" data-zh="查看完整清单 →">View full list →</a></div>
+      <div class="media-category-row">{mediaGroups.map(g => <div><span class="media-icon">◎</span><strong data-en={g.en} data-zh={g.zh}>{g.en}</strong></div>)}</div>
+      <p class="media-note" data-en="19+ media outlets across 6 categories, including Bloomberg, Reuters, SCMP, HKET, TVB, ETNET, Ming Pao, Sina Finance and more." data-zh="覆盖6大类19+家媒体，包括彭博、路透、南华早报、香港经济日报、TVB、经济通、明报、新浪财经等。">19+ media outlets across 6 categories, including Bloomberg, Reuters, SCMP, HKET, TVB, ETNET, Ming Pao, Sina Finance and more.</p>
+      <p class="disclaimer" data-en="Media relationships and coverage may be team-level rather than individually owned." data-zh="媒体合作及覆盖可能属于团队层面的企业传讯资源，并非全部为个人独立拥有。">Media relationships and coverage may be team-level rather than individually owned.</p>
+    </div>
+
+    <div class="panel connect-panel">
+      <div class="section-head"><h3 data-en="LET'S CONNECT" data-zh="保持联系">LET'S CONNECT</h3></div>
+      <a class="contact-line" href={`mailto:${profile.email}`}>✉ <span>{profile.email}</span></a>
+      <a class="contact-line" href={profile.linkedin} target="_blank" rel="noreferrer"><b>in</b> <span>LinkedIn</span></a>
+      <a class="btn-gold" href={`mailto:${profile.email}`} data-en="Get In Touch →" data-zh="联系我 →">Get In Touch →</a>
+      <p class="linkedin-todo" data-en="Before publishing, replace the LinkedIn placeholder URL in src/config.ts with your real profile link." data-zh="正式发布前，请在 src/config.ts 中将 LinkedIn 占位链接替换为你的真实个人主页。">Before publishing, replace the LinkedIn placeholder URL in src/config.ts with your real profile link.</p>
     </div>
   </section>
-
-  <section class="section alt">
-    <div class="container">
-      <div class="section-head"><div><div class="kicker">Portfolio</div><h2>Selected Work</h2></div><a class="btn btn-outline" href="/impact">View All</a></div>
-      <div class="grid-3">
-        <article class="card impact-card"><div class="impact-art"></div><div class="impact-body"><div class="number">01</div><h3>Corporate Communications & Media Relations</h3><p>Managing bilingual content, media engagement, digital channels and corporate information for a financial institution.</p></div></article>
-        <article class="card impact-card"><div class="impact-art"></div><div class="impact-body"><div class="number">02</div><h3>Listed-company Financial PR & IR</h3><p>Supporting approximately 15 listed-company clients across messaging, investor communications, media relations and events.</p></div></article>
-        <article class="card impact-card"><div class="impact-art"></div><div class="impact-body"><div class="number">03</div><h3>ESG & Stakeholder Engagement</h3><p>Planning ESG activities and stakeholder-facing communications across corporate and project environments.</p></div></article>
-      </div>
-    </div>
-  </section>
-
-  <section class="section">
-    <div class="container split">
-      <div><div class="kicker">Career</div><h2>Career Journey</h2><p class="section-lead">A progression from financial PR agency work to public stakeholder relations and in-house corporate communications within financial services.</p><a class="btn btn-outline" href="/career">View Career Timeline</a></div>
-      <div class="timeline">
-        <div class="timeline-item"><h3>Corporate Communication — Assistant Manager</h3><div class="timeline-meta">Haitong International Securities Group Limited · 2024–Present</div></div>
-        <div class="timeline-item"><h3>Assistant Public Relation Officer</h3><div class="timeline-meta">Chun Wo Development Holding Limited · 2023–2024</div></div>
-        <div class="timeline-item"><h3>Senior PR Associate</h3><div class="timeline-meta">Wonderful Sky Financial Group Limited · 2021–2022</div></div>
-      </div>
-    </div>
-  </section>
-
-  <section class="cta"><div class="container"><div><div class="kicker">Connect</div><h2 style="margin:6px 0 0">Let’s exchange perspectives on corporate communications, financial PR and stakeholder engagement.</h2></div><a class="btn btn-primary" href="/contact">Contact Me</a></div></section>
 </BaseLayout>

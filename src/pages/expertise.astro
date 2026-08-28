@@ -1,12 +1,15 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 const groups = [
-['Corporate Communications',['Corporate messaging','Bilingual communications','Press releases','Corporate publications','Corporate website','Newsletters']],
-['Financial PR & IR',['Listed-company communications','Investor-relations support','Financial PR','Market communications','Corporate events','Networking events']],
-['Media Relations',['Media engagement','Media pitching','Interview coordination','Media-list management','Media monitoring','Public-opinion monitoring']],
-['Stakeholder Engagement',['Stakeholder communications','Public consultation','Public enquiries','Community relations','Issue management','Crisis communications']],
-['Brand & Digital',['Brand management','Social media','Corporate identity','Digital content','Corporate collateral','Brand updates']],
-['ESG & Events',['ESG communications','Corporate events','Press conferences','Venue coordination','Stakeholder programmes','Event materials']]
+ ['Corporate Communications','企业传讯',['Corporate Messaging','Bilingual Communications','Press Releases','Corporate Publications','Corporate Website']],
+ ['Financial PR & IR','财经公关与投资者关系',['Listed-company Communications','Investor Relations Support','Financial PR','Market Communications','Corporate Events']],
+ ['Media Relations','媒体关系',['Media Engagement','Media Pitching','Interviews','Media Monitoring','Public Opinion Monitoring']],
+ ['Stakeholder Engagement','持份者沟通',['Public Consultation','Public Enquiries','Community Relations','Issue Management','Crisis Communications']],
+ ['Brand & Digital','品牌与数字传播',['Brand Management','Social Media','Digital Content','Corporate Identity','Corporate Collateral']],
+ ['ESG & Events','ESG与活动',['ESG Communications','Corporate Events','Press Conferences','Networking Events','Stakeholder Programmes']]
 ];
 ---
-<BaseLayout title="Expertise | Siqi Chen"><section class="page-hero"><div class="container"><div class="eyebrow">Expertise</div><h1>Capability Map</h1><p>Experience spanning corporate communications, financial PR, media relations, stakeholder engagement, branding and ESG.</p></div></section><section class="section"><div class="container grid-3">{groups.map(([title,items]) => <div class="card"><h3>{title}</h3><ul class="clean">{items.map((i)=> <li>{i}</li>)}</ul></div>)}</div></section><section class="section alt"><div class="container"><div class="kicker">Communication Skills</div><h2>Cross-functional & Multilingual</h2><p class="section-lead">English · Mandarin · Cantonese · Taiwanese · Stakeholder communication · Presentation · Visual communication</p></div></section></BaseLayout>
+<BaseLayout title="Expertise | Siqi Chen">
+  <section class="page-hero"><div class="wide-container"><p class="eyebrow" data-en="CAPABILITY MAP" data-zh="能力地图">CAPABILITY MAP</p><h1 data-en="Expertise" data-zh="专业能力">Expertise</h1><p data-en="A communications skill set shaped by agency-side financial PR, stakeholder-facing public relations and in-house corporate communications." data-zh="能力体系来自财经公关代理、公共及持份者关系，以及金融机构企业传讯三类实战环境。">A communications skill set shaped by agency-side financial PR, stakeholder-facing public relations and in-house corporate communications.</p></div></section>
+  <section class="wide-container capability-grid">{groups.map(([en,zh,items],i)=><article class="capability-card"><span class="cap-index">0{i+1}</span><h2 data-en={en} data-zh={zh}>{en}</h2><ul>{items.map(x=><li>{x}</li>)}</ul></article>)}</section>
+</BaseLayout>
