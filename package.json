@@ -1,7 +1,7 @@
 {
-  "name": "cc-portfolio-site",
-  "type": "module",
-  "version": "0.1.0",
+  "name": "shirleysiqi-portfolio",
+  "version": "1.0.0",
+  "private": true,
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",

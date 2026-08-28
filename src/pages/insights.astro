@@ -1,0 +1,5 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+const articles=[['Building Effective Compliance Controls in Investment Banking','Why effective controls depend on ownership, clarity and management visibility.','Compliance'],['From Compliance Monitoring to Compliance Intelligence','How data and technology are reshaping compliance operating models.','Transformation'],['The Future of Compliance in the AI Era','Why AI may reshape compliance workflows rather than simply automate existing processes.','AI & RegTech']];
+---
+<BaseLayout title="Insights | Shirley Siqi"><section class="page-hero"><div class="container"><div class="eyebrow">Insights</div><h1>Professional Perspectives</h1><p>Short-form thinking on compliance, governance, controls and technology.</p></div></section><section class="section"><div class="container grid-3">{articles.map((a)=><article class="card article-card"><div class="article-meta">{a[2]}</div><h3>{a[0]}</h3><p>{a[1]}</p><span class="tag">Draft topic</span></article>)}</div></section></BaseLayout>

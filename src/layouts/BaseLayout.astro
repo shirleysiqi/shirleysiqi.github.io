@@ -1,0 +1,38 @@
+---
+import '../styles/global.css';
+const { title = 'Shirley Siqi | Compliance & Controls', description = 'Professional portfolio in compliance, controls and governance.' } = Astro.props;
+const path = Astro.url.pathname;
+const nav = [
+  ['Home','/'],['About','/about'],['Expertise','/expertise'],['Impact','/impact'],['Career','/career'],['Insights','/insights'],['Contact','/contact']
+];
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content={description} />
+    <meta name="theme-color" content="#081a2b" />
+    <title>{title}</title>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container nav-wrap">
+        <a href="/" class="brand" aria-label="Home">SS</a>
+        <nav class="nav">
+          {nav.map(([label, href]) => <a class:list={[path === href && 'active']} href={href}>{label}</a>)}
+        </nav>
+        <a class="btn btn-outline small" href="/cv/shirley-siqi-cv.pdf">Download CV</a>
+      </div>
+    </header>
+    <main>
+      <slot />
+    </main>
+    <footer class="site-footer">
+      <div class="container footer-grid">
+        <div><strong>Shirley Siqi</strong><p>Compliance · Controls · Governance</p></div>
+        <div><p>Hong Kong</p><p>© {new Date().getFullYear()} Shirley Siqi</p></div>
+      </div>
+    </footer>
+  </body>
+</html>
