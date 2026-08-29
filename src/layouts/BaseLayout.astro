@@ -1,86 +1,75 @@
 ---
 import '../styles/global.css';
-import { profile } from '../config';
-const {
-  title = 'Siqi Chen | Corporate Communications & Financial PR',
-  description = 'Hong Kong-based corporate communications professional with experience in financial PR, listed-company communications, media relations, ESG and stakeholder engagement.'
-} = Astro.props;
+import { site } from '../data/site';
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+const { title, description = site.intro } = Astro.props;
+const pageTitle = title ? `${title} | ${site.name}` : `${site.name} | 企業傳訊 · 媒體關係 · 財經公關`;
 const path = Astro.url.pathname;
 const nav = [
-  ['Home','首页','/'],
-  ['About','关于我','/about'],
-  ['Expertise','专业能力','/expertise'],
-  ['Portfolio','作品集','/portfolio'],
-  ['Media Coverage','媒体资源','/media'],
-  ['Career','职业经历','/career'],
-  ['Insights','观点','/insights'],
-  ['Contact','联系我','/contact']
+  { href: '/', label: '首頁' },
+  { href: '/experience/', label: '工作經歷' },
+  { href: '/practice/', label: '專業實踐' },
+  { href: '/about/', label: '關於我' }
 ];
 ---
 <!doctype html>
-<html lang="en">
+<html lang="zh-Hant">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width" />
     <meta name="description" content={description} />
-    <meta name="theme-color" content="#07182a" />
-    <meta property="og:title" content={title} />
-    <meta property="og:description" content={description} />
-    <meta property="og:type" content="website" />
-    <meta property="og:url" content={profile.site} />
-    <meta property="og:image" content={`${profile.site}/images/siqi-chen-profile.jpg`} />
-    <title>{title}</title>
+    <meta name="theme-color" content="#071b31" />
+    <title>{pageTitle}</title>
   </head>
   <body>
     <header class="site-header">
-      <div class="wide-container nav-wrap">
-        <a href="/" class="wordmark" aria-label="Home">
-          <strong>SIQI CHEN <span>陳思琦</span></strong>
-          <small data-en="Corporate Communications Professional" data-zh="企业传讯专业人士">Corporate Communications Professional</small>
+      <div class="nav-wrap shell">
+        <a class="brand" href="/" aria-label="回到首頁">
+          <strong>Shirley CHEN</strong><span>陳思琦</span>
         </a>
-        <nav class="nav" aria-label="Primary navigation">
-          {nav.map(([en, zh, href]) => (
-            <a class:list={[path === href && 'active']} href={href} data-en={en} data-zh={zh}>{en}</a>
+        <nav class="main-nav" aria-label="主要導覽">
+          {nav.map((item) => (
+            <a class:list={[path === item.href && 'active']} href={item.href}>{item.label}</a>
           ))}
         </nav>
-        <div class="nav-actions">
-          <a class="linkedin-icon" href={profile.linkedin} target="_blank" rel="noreferrer" aria-label="LinkedIn">in</a>
-          <button id="lang-toggle" class="lang-toggle" type="button" aria-label="Switch language">EN&nbsp; | &nbsp;中文</button>
-        </div>
+        <a class="linkedin-link" href={site.linkedin} target="_blank" rel="noreferrer" aria-label="LinkedIn">in</a>
+        <button class="menu-button" aria-label="開啟選單" aria-expanded="false">☰</button>
+      </div>
+      <div class="mobile-nav shell" hidden>
+        {nav.map((item) => <a href={item.href}>{item.label}</a>)}
       </div>
     </header>
     <main><slot /></main>
-    <footer class="site-footer">
-      <div class="wide-container footer-grid">
+    <footer class="footer">
+      <div class="shell footer-grid">
         <div>
-          <strong>© {new Date().getFullYear()} Siqi Chen 陳思琦</strong>
-          <span data-en="Corporate Communications · Financial PR · Media Relations" data-zh="企业传讯 · 财经公关 · 媒体关系">Corporate Communications · Financial PR · Media Relations</span>
+          <div class="footer-name">Shirley CHEN 陳思琦</div>
+          <p>企業傳訊 · 媒體關係 · 財經公關</p>
         </div>
-        <div class="footer-links">
-          <a href={`mailto:${profile.email}`}>{profile.email}</a>
-          <a href={profile.linkedin} target="_blank" rel="noreferrer">LinkedIn</a>
+        <div>
+          <strong>聯絡方式</strong>
+          <a href={`mailto:${site.email}`}>{site.email}</a>
+          <span>香港</span>
         </div>
+        <div>
+          <strong>專業連結</strong>
+          <a href={site.linkedin} target="_blank" rel="noreferrer">LinkedIn</a>
+        </div>
+        <div class="footer-copy">© {new Date().getFullYear()} Shirley CHEN 陳思琦</div>
       </div>
     </footer>
     <script is:inline>
-      (() => {
-        const KEY = 'siqi-lang';
-        const toggle = document.getElementById('lang-toggle');
-        const apply = (lang) => {
-          document.documentElement.lang = lang === 'zh' ? 'zh-Hant' : 'en';
-          document.querySelectorAll('[data-en][data-zh]').forEach((el) => {
-            el.textContent = lang === 'zh' ? el.dataset.zh : el.dataset.en;
-          });
-          if (toggle) toggle.textContent = lang === 'zh' ? '中文 | EN' : 'EN | 中文';
-          localStorage.setItem(KEY, lang);
-        };
-        let lang = localStorage.getItem(KEY) || 'en';
-        apply(lang);
-        toggle?.addEventListener('click', () => {
-          lang = (localStorage.getItem(KEY) || 'en') === 'en' ? 'zh' : 'en';
-          apply(lang);
-        });
-      })();
+      const menuButton = document.querySelector('.menu-button');
+      const mobileNav = document.querySelector('.mobile-nav');
+      menuButton?.addEventListener('click', () => {
+        const open = menuButton.getAttribute('aria-expanded') === 'true';
+        menuButton.setAttribute('aria-expanded', String(!open));
+        if (mobileNav) mobileNav.hidden = open;
+      });
     </script>
   </body>
 </html>

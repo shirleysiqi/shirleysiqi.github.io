@@ -1,16 +1,39 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import { site, education, languages } from '../data/site';
 ---
-<BaseLayout title="About | Siqi Chen">
-  <section class="page-hero"><div class="wide-container"><p class="eyebrow" data-en="PROFILE" data-zh="个人简介">PROFILE</p><h1 data-en="About Siqi" data-zh="关于思琦">About Siqi</h1></div></section>
-  <section class="wide-container profile-layout">
-    <aside class="profile-card"><img src="/images/siqi-chen-profile.jpg" alt="Siqi Chen" /><h2>Siqi Chen <span>陳思琦</span></h2><p data-en="Corporate Communications Professional · Hong Kong" data-zh="企业传讯专业人士 · 香港">Corporate Communications Professional · Hong Kong</p></aside>
-    <article class="prose-card">
-      <h2 data-en="Professional Profile" data-zh="职业简介">Professional Profile</h2>
-      <p data-en="I am a Hong Kong-based corporate communications professional with experience across financial services, listed-company communications and public relations." data-zh="我是一名常驻香港的企业传讯专业人士，拥有金融服务、上市公司财经公关及公共关系等多元经验。">I am a Hong Kong-based corporate communications professional with experience across financial services, listed-company communications and public relations.</p>
-      <p data-en="My career began in financial PR, where I supported around 15 Hong Kong-listed companies across corporate messaging, investor relations, media engagement and stakeholder events. I later broadened my experience into public and stakeholder relations before moving into an in-house corporate communications role within the financial services industry." data-zh="我的职业生涯始于财经公关，曾为约15家香港上市公司提供企业信息传达、投资者关系、媒体沟通及持份者活动支持。随后，我拓展至公共及持份者关系，并进入金融服务机构从事企业传讯工作。">My career began in financial PR, where I supported around 15 Hong Kong-listed companies across corporate messaging, investor relations, media engagement and stakeholder events. I later broadened my experience into public and stakeholder relations before moving into an in-house corporate communications role within the financial services industry.</p>
-      <p data-en="My current work spans bilingual corporate communications, media relations, digital communications, corporate publications, ESG initiatives and brand management." data-zh="目前我的工作覆盖双语企业传讯、媒体关系、数字传播、企业刊物、ESG项目及品牌管理。">My current work spans bilingual corporate communications, media relations, digital communications, corporate publications, ESG initiatives and brand management.</p>
-      <div class="edu-grid"><div><span>2019–2020</span><h3>The Hong Kong Polytechnic University</h3><p>Master of Business Management</p><strong data-en="HKD 110,000 scholarship recipient" data-zh="获港币110,000元奖学金">HKD 110,000 scholarship recipient</strong></div><div><span>2014–2018</span><h3>Xiamen University of Technology</h3><p>Bachelor in International Business</p></div></div>
-    </article>
+<BaseLayout title="關於我">
+  <section class="page-hero shell">
+    <span class="eyebrow dark-text">ABOUT</span>
+    <h1>關於我</h1>
+    <p>企業傳訊、媒體關係與財經公關背景，立足香港的專業傳訊經驗。</p>
+  </section>
+  <section class="section shell about-grid">
+    <div class="about-photo"><img src="/images/shirley-chen-profile.jpg" alt="Shirley CHEN 陳思琦" /></div>
+    <div class="about-copy">
+      <span class="eyebrow dark-text">PROFESSIONAL PROFILE</span>
+      <h2>Shirley CHEN 陳思琦</h2>
+      {site.about.map((p) => <p>{p}</p>)}
+      <div class="about-contact-row">
+        <a href={`mailto:${site.email}`}>{site.email}</a>
+        <a href={site.linkedin} target="_blank" rel="noreferrer">LinkedIn →</a>
+      </div>
+    </div>
+  </section>
+  <section class="section soft-section">
+    <div class="shell two-column-info">
+      <div>
+        <div class="section-heading"><span>EDUCATION</span><h2>教育背景</h2></div>
+        <div class="info-stack">
+          {education.map((item) => (
+            <article><h3>{item.school}</h3><p>{item.degree}</p><span>{item.period}</span>{item.note && <small>{item.note}</small>}</article>
+          ))}
+        </div>
+      </div>
+      <div>
+        <div class="section-heading"><span>LANGUAGES</span><h2>語言能力</h2></div>
+        <div class="language-grid">{languages.map((lang) => <span>{lang}</span>)}</div>
+      </div>
+    </div>
   </section>
 </BaseLayout>

@@ -1,130 +1,103 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { clients, mediaGroups, profile } from '../config';
-const works = [
-  {
-    image: 'https://images.unsplash.com/photo-1505373877841-8d25f7d46678?auto=format&fit=crop&w=900&q=82',
-    title: 'Corporate Communications & Media Relations',
-    titleZh: '企业传讯与媒体关系',
-    desc: 'Managing bilingual corporate communications and media engagement for a leading Hong Kong financial institution.',
-    descZh: '为香港领先金融机构管理双语企业传讯、媒体关系与日常对外沟通。',
-    tags: ['Corporate Messaging', 'Media Relations', 'Monitoring']
-  },
-  {
-    image: 'https://images.unsplash.com/photo-1497366811353-6870744d04b2?auto=format&fit=crop&w=900&q=82',
-    title: 'Financial PR for Listed Companies',
-    titleZh: '上市公司财经公关',
-    desc: 'Providing financial PR solutions to around 15 Hong Kong-listed companies across multiple sectors.',
-    descZh: '曾为约15家香港上市公司提供财经公关、媒体与活动支持。',
-    tags: ['Financial PR', 'Events']
-  },
-  {
-    image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=900&q=82',
-    title: 'Communications & Corporate Content',
-    titleZh: '传讯与企业内容',
-    desc: 'Overseeing corporate website, social media platforms, external information updates and quarterly newsletters.',
-    descZh: '负责企业网站、社交媒体平台、对外信息更新及季度通讯等内容撰写及发布工作。',
-    tags: ['Digital', 'Website', 'Content']
-  },
-  {
-    image: 'https://images.unsplash.com/photo-1532601224476-15c79f2f7a51?auto=format&fit=crop&w=900&q=82',
-    title: 'ESG & Stakeholder Engagement',
-    titleZh: 'ESG与持份者沟通',
-    desc: 'Planning and executing ESG initiatives, public engagement and stakeholder communication programmes.',
-    descZh: '策划并执行ESG活动、公众参与及持份者沟通项目。',
-    tags: ['ESG', 'Stakeholders', 'Events']
-  }
-];
+import { site, capabilities, experience } from '../data/site';
+import practice from '../data/practice.json';
+const featured = practice.slice(0, 3);
 ---
 <BaseLayout>
-  <section class="hero-home">
-    <div class="hero-overlay"></div>
-    <div class="wide-container hero-home-grid">
-      <div class="portrait-wrap"><img src="/images/siqi-chen-profile.jpg" alt="Siqi Chen" /></div>
+  <section class="hero">
+    <div class="hero-lines" aria-hidden="true"></div>
+    <div class="shell hero-grid">
       <div class="hero-copy">
-        <p class="eyebrow" data-en="HONG KONG · CORPORATE COMMUNICATIONS" data-zh="香港 · 企业传讯">HONG KONG · CORPORATE COMMUNICATIONS</p>
-        <h1>Siqi Chen <span>陳思琦</span></h1>
-        <h2 data-en="Corporate Communications · Financial PR · Media Relations · Corporate Branding" data-zh="企业传讯 · 财经公关 · 媒体关系 · 企业品牌">Corporate Communications · Financial PR · Investor Relations</h2>
-        <p class="hero-lead" data-en="Building trusted corporate narratives and stakeholder relationships across financial markets." data-zh="以专业企业叙事与持份者关系管理，连接金融市场、媒体与公众。">Building trusted corporate narratives and stakeholder relationships across financial markets.</p>
-        <div class="hero-tags">
-          <span data-en="Financial Services" data-zh="金融服务">Financial Services</span>
-          <span data-en="Listed Companies" data-zh="上市公司">Listed Companies</span>
-          <span data-en="Media Relations" data-zh="媒体关系">Media Relations</span>
-          <span>ESG</span><span data-en="Branding" data-zh="品牌管理">Branding</span>
+        <div class="eyebrow">HONG KONG · CORPORATE COMMUNICATIONS</div>
+        <h1><span>Shirley CHEN</span><em>陳思琦</em></h1>
+        <h2>{site.role}</h2>
+        <div class="role-en">{site.roleEn}</div>
+        <p>{site.intro}</p>
+        <div class="hero-actions">
+          <a class="button primary" href="/experience/">了解我的經歷</a>
+          <a class="button secondary" href="/practice/">查看專業實踐</a>
         </div>
       </div>
-    </div>
-    <div class="wide-container metrics-row">
-      <div><strong>15+</strong><span data-en="Listed-company clients supported" data-zh="曾服务上市公司客户">Listed-company clients supported</span></div>
-      <div><strong>19+</strong><span data-en="Media outlets in coverage overview" data-zh="媒体资源覆盖总览">Media outlets in coverage overview</span></div>
-      <div><strong>6</strong><span data-en="Media categories represented" data-zh="媒体类别覆盖">Media categories represented</span></div>
-      <div><strong>360°</strong><span data-en="Communications exposure" data-zh="全方位传讯经验">Communications exposure</span></div>
-    </div>
-  </section>
-
-  <section class="wide-container portfolio-focus-home">
-    <div class="section-title-row">
-      <div><p class="eyebrow dark" data-en="PORTFOLIO FOCUS" data-zh="作品集重点">PORTFOLIO FOCUS</p><h2 data-en="Explore by professional theme" data-zh="按专业主题浏览">Explore by professional theme</h2></div>
-      <a class="text-link" href="/portfolio" data-en="View full portfolio →" data-zh="查看完整作品集 →">View full portfolio →</a>
-    </div>
-    <div class="portfolio-focus-grid">
-      <a href="/portfolio?category=esg" class="focus-card focus-esg"><span>ESG</span><h3 data-en="ESG & Corporate Engagement" data-zh="ESG与企业参与">ESG & Corporate Engagement</h3><p data-en="Activity stories, event photography and engagement highlights — without forcing a separate 'My Role' section." data-zh="通过活动故事、现场图片和参与亮点展示ESG项目，无需单独强调“My Role”。">Activity stories, event photography and engagement highlights — without forcing a separate 'My Role' section.</p><b data-en="Explore ESG work →" data-zh="浏览ESG项目 →">Explore ESG work →</b></a>
-      <a href="/portfolio?category=media-event" class="focus-card focus-media"><span>MEDIA</span><h3 data-en="Media Relations & Event Coverage" data-zh="媒体关系与活动传播">Media Relations & Event Coverage</h3><p data-en="Event photos, media engagement and earned coverage presented with preview screenshots and original source links." data-zh="以活动照片、媒体参与、报道预览截图和原文链接呈现完整传播闭环。">Event photos, media engagement and earned coverage presented with preview screenshots and original source links.</p><b data-en="Explore media events →" data-zh="浏览媒体活动 →">Explore media events →</b></a>
-    </div>
-  </section>
-
-  <section class="home-dashboard wide-container">
-    <div class="home-col expertise-col">
-      <div class="section-head"><h3 data-en="EXPERTISE" data-zh="专业能力">EXPERTISE</h3><a href="/expertise" data-en="View all →" data-zh="查看全部 →">View all →</a></div>
-      <div class="mini-expertise-grid">
-        {[
-          ['Corporate Communications','企业传讯','Corporate messaging, bilingual communications, press releases, corporate website and publications.'],
-          ['Financial PR ','财经公关','Supporting listed companies in financial PR and capital markets communications.'],
-          ['Media Relations','媒体关系','Media engagement, pitching, interviews, monitoring and reputation management.'],
-          ['Stakeholder Engagement','持份者沟通','Public consultation, stakeholder communications, issue management and crisis communications.'],
-          ['Brand & Digital','品牌与数字传播','Brand management, social media, digital content and corporate identity.'],
-          ['ESG & Events','ESG与活动','ESG communications, corporate events, press conferences and stakeholder programmes.']
-        ].map(([en,zh,desc], i) => <article class="mini-expertise"><span class="num">0{i+1}</span><div><h4 data-en={en} data-zh={zh}>{en}</h4><p>{desc}</p></div></article>)}
-      </div>
-    </div>
-
-    <div class="home-col work-col">
-      <div class="section-head"><h3 data-en="FEATURED WORK" data-zh="代表作品">FEATURED WORK</h3><a href="/portfolio" data-en="View all →" data-zh="查看全部 →">View all →</a></div>
-      <div class="work-grid compact">
-        {works.map((w) => <article class="work-card"><img src={w.image} alt="" loading="lazy" /><div class="work-card-body"><h4 data-en={w.title} data-zh={w.titleZh}>{w.title}</h4><p data-en={w.desc} data-zh={w.descZh}>{w.desc}</p><div class="tag-row">{w.tags.map(t=><span>{t}</span>)}</div></div></article>)}
-      </div>
-    </div>
-
-    <div class="home-col career-col">
-      <div class="section-head"><h3 data-en="CAREER JOURNEY" data-zh="职业经历">CAREER JOURNEY</h3><a href="/career" data-en="View all →" data-zh="查看全部 →">View all →</a></div>
-      <div class="timeline compact">
-        <article><time>2024 – Present</time><h4>Haitong International Securities Group Limited</h4><strong>Corporate Communication · Assistant Manager</strong><p data-en="Corporate communications, media relations, bilingual content, digital channels, ESG initiatives and brand management." data-zh="负责企业传讯、媒体关系、双语内容、数字渠道、ESG活动及品牌管理。">Corporate communications, media relations, bilingual content, digital channels, ESG initiatives and brand management.</p></article>
-        <article><time>2023 – 2024</time><h4>Chun Wo Development Holdings Limited</h4><strong>Assistant Public Relation Officer</strong><p data-en="Stakeholder communications, public consultation, ESG events, issue monitoring and crisis communications." data-zh="负责持份者沟通、公众咨询、ESG活动、舆情监测及危机传讯。">Stakeholder communications, public consultation, ESG events, issue monitoring and crisis communications.</p></article>
-        <article><time>2021 – 2022</time><h4>Wonderful Sky Financial Group Limited</h4><strong>Senior PR Associate</strong><p data-en="Financial PR and IR solutions for around 15 Hong Kong-listed companies." data-zh="为约15家香港上市公司提供财经公关及投资者关系服务。">Financial PR and IR solutions for around 15 Hong Kong-listed companies.</p></article>
+      <div class="portrait-wrap">
+        <div class="portrait-halo"></div>
+        <img src="/images/shirley-chen-profile.jpg" alt="Shirley CHEN 陳思琦" />
+        <div class="portrait-caption"><span>企業傳訊</span><span>媒體關係</span><span>財經公關</span></div>
       </div>
     </div>
   </section>
 
-  <section class="wide-container lower-grid">
-    <div class="panel clients-panel">
-      <div class="section-head"><h3 data-en="SELECTED CLIENTS (PARTIAL)" data-zh="部分服务客户">SELECTED CLIENTS (PARTIAL)</h3><a href="/portfolio" data-en="View more →" data-zh="查看更多 →">View more →</a></div>
-      <div class="client-grid">{clients.map(c => <div class="client-chip"><strong>{c.name}</strong><span>{c.code || c.sector}</span></div>)}</div>
-      <p class="disclaimer" data-en="Selected agency-side client exposure based on prior professional experience; displayed for portfolio context only." data-zh="以上为过往代理公司工作中的部分客户服务经验，仅用于职业作品集展示。">Selected agency-side client exposure based on prior professional experience; displayed for portfolio context only.</p>
+  <section class="section shell">
+    <div class="section-heading centered">
+      <span>WHAT I DO</span><h2>我的專業</h2>
     </div>
-
-    <div class="panel media-panel">
-      <div class="section-head"><h3 data-en="MEDIA COVERAGE & PARTNERSHIP EXPOSURE" data-zh="媒体资源覆盖与合作经验">MEDIA COVERAGE & PARTNERSHIP EXPOSURE</h3><a href="/media" data-en="View full list →" data-zh="查看完整清单 →">View full list →</a></div>
-      <div class="media-category-row">{mediaGroups.map(g => <div><span class="media-icon">◎</span><strong data-en={g.en} data-zh={g.zh}>{g.en}</strong></div>)}</div>
-      <p class="media-note" data-en="19+ media outlets across 6 categories, including Bloomberg, Reuters, SCMP, HKET, TVB, ETNET, Ming Pao, Sina Finance and more." data-zh="覆盖6大类19+家媒体，包括彭博、路透、南华早报、香港经济日报、TVB、经济通、明报、新浪财经等。">19+ media outlets across 6 categories, including Bloomberg, Reuters, SCMP, HKET, TVB, ETNET, Ming Pao, Sina Finance and more.</p>
-      <p class="disclaimer" data-en="Media relationships and coverage may be team-level rather than individually owned." data-zh="媒体合作及覆盖可能属于团队层面的企业传讯资源，并非全部为个人独立拥有。">Media relationships and coverage may be team-level rather than individually owned.</p>
+    <div class="capability-grid">
+      {capabilities.map((item, i) => (
+        <article class="capability-card">
+          <div class="capability-number">0{i + 1}</div>
+          <h3>{item.title}</h3>
+          <div class="small-en">{item.en}</div>
+          <p>{item.text}</p>
+        </article>
+      ))}
     </div>
+  </section>
 
-    <div class="panel connect-panel">
-      <div class="section-head"><h3 data-en="LET'S CONNECT" data-zh="保持联系">LET'S CONNECT</h3></div>
-      <a class="contact-line" href={`mailto:${profile.email}`}>✉ <span>{profile.email}</span></a>
-      <a class="contact-line" href={profile.linkedin} target="_blank" rel="noreferrer"><b>in</b> <span>LinkedIn</span></a>
-      <a class="btn-gold" href={`mailto:${profile.email}`} data-en="Get In Touch →" data-zh="联系我 →">Get In Touch →</a>
-      <p class="linkedin-todo" data-en="Before publishing, replace the LinkedIn placeholder URL in src/config.ts with your real profile link." data-zh="正式发布前，请在 src/config.ts 中将 LinkedIn 占位链接替换为你的真实个人主页。">Before publishing, replace the LinkedIn placeholder URL in src/config.ts with your real profile link.</p>
+  <section class="section soft-section">
+    <div class="shell">
+      <div class="section-heading split-heading">
+        <div><span>EXPERIENCE</span><h2>工作經歷</h2></div>
+        <a class="text-link" href="/experience/">查看完整經歷 →</a>
+      </div>
+      <div class="timeline-snapshot">
+        {experience.map((job) => (
+          <article>
+            <div class="period">{job.period}</div>
+            <h3>{job.company}</h3>
+            <strong>{job.role}</strong>
+            <p>{job.summary}</p>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section shell">
+    <div class="section-heading split-heading">
+      <div><span>PROFESSIONAL HIGHLIGHTS</span><h2>專業實踐</h2></div>
+      <a class="text-link" href="/practice/">查看全部 →</a>
+    </div>
+    {featured.length > 0 ? (
+      <div class="practice-grid compact">
+        {featured.map((item) => (
+          <article class="practice-card">
+            {item.image && <img src={item.image} alt="" />}
+            <div class="practice-body">
+              <span class="category-pill">{item.category}</span>
+              <h3>{item.title}</h3><p>{item.summary}</p>
+            </div>
+          </article>
+        ))}
+      </div>
+    ) : (
+      <div class="empty-feature">
+        <div>
+          <strong>專業實踐內容可按需要逐步加入。</strong>
+          <p>此區域將整理媒體活動、企業活動，以及 ESG 與持份者參與相關經驗。</p>
+        </div>
+        <a class="button secondary dark" href="/practice/">進入專業實踐</a>
+      </div>
+    )}
+  </section>
+
+  <section class="contact-strip">
+    <div class="shell contact-strip-inner">
+      <div><span>LET’S CONNECT</span><h2>保持聯繫</h2></div>
+      <p>歡迎就企業傳訊、媒體合作及專業交流與我聯絡。</p>
+      <div class="contact-actions">
+        <a class="button primary" href={`mailto:${site.email}`}>Email</a>
+        <a class="button secondary" href={site.linkedin} target="_blank" rel="noreferrer">LinkedIn</a>
+      </div>
     </div>
   </section>
 </BaseLayout>

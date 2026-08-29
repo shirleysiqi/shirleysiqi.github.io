@@ -1,0 +1,25 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { experience } from '../data/site';
+---
+<BaseLayout title="工作經歷">
+  <section class="page-hero shell">
+    <span class="eyebrow dark-text">EXPERIENCE</span>
+    <h1>工作經歷</h1>
+    <p>由財經公關顧問、企業及持份者傳訊，到金融機構企業傳訊的職業發展軌跡。</p>
+  </section>
+  <section class="section shell experience-list">
+    {experience.map((job, i) => (
+      <article class="experience-item">
+        <div class="experience-index">0{i + 1}</div>
+        <div class="experience-date">{job.period}</div>
+        <div class="experience-content">
+          <h2>{job.company}</h2>
+          <h3>{job.role}</h3>
+          <p class="lead-small">{job.summary}</p>
+          <ul>{job.bullets.map((bullet) => <li>{bullet}</li>)}</ul>
+        </div>
+      </article>
+    ))}
+  </section>
+</BaseLayout>

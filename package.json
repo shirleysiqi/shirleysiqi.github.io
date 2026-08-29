@@ -1,6 +1,6 @@
 {
-  "name": "shirleysiqi-portfolio",
-  "version": "1.0.0",
+  "name": "shirleysiqi-professional-profile-v6",
+  "version": "6.0.0",
   "private": true,
   "scripts": {
     "dev": "astro dev",
