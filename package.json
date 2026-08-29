@@ -1,7 +1,8 @@
 {
-  "name": "shirleysiqi-professional-profile-v6",
-  "version": "6.0.0",
+  "name": "shirleysiqi-professional-profile-v7",
+  "version": "1.0.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",

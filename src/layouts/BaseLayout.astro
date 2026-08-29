@@ -1,75 +1,82 @@
 ---
 import '../styles/global.css';
-import { site } from '../data/site';
-
-interface Props {
-  title?: string;
-  description?: string;
-}
-const { title, description = site.intro } = Astro.props;
-const pageTitle = title ? `${title} | ${site.name}` : `${site.name} | 企業傳訊 · 媒體關係 · 財經公關`;
+import { nav, site } from '../data/site';
+interface Props { titleZh?: string; titleEn?: string; }
+const { titleZh, titleEn } = Astro.props;
 const path = Astro.url.pathname;
-const nav = [
-  { href: '/', label: '首頁' },
-  { href: '/experience/', label: '工作經歷' },
-  { href: '/practice/', label: '專業實踐' },
-  { href: '/about/', label: '關於我' }
-];
 ---
 <!doctype html>
-<html lang="zh-Hant">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width" />
-    <meta name="description" content={description} />
-    <meta name="theme-color" content="#071b31" />
-    <title>{pageTitle}</title>
-  </head>
-  <body>
-    <header class="site-header">
-      <div class="nav-wrap shell">
-        <a class="brand" href="/" aria-label="回到首頁">
-          <strong>Shirley CHEN</strong><span>陳思琦</span>
-        </a>
-        <nav class="main-nav" aria-label="主要導覽">
-          {nav.map((item) => (
-            <a class:list={[path === item.href && 'active']} href={item.href}>{item.label}</a>
-          ))}
-        </nav>
-        <a class="linkedin-link" href={site.linkedin} target="_blank" rel="noreferrer" aria-label="LinkedIn">in</a>
-        <button class="menu-button" aria-label="開啟選單" aria-expanded="false">☰</button>
-      </div>
-      <div class="mobile-nav shell" hidden>
-        {nav.map((item) => <a href={item.href}>{item.label}</a>)}
-      </div>
-    </header>
-    <main><slot /></main>
-    <footer class="footer">
-      <div class="shell footer-grid">
-        <div>
-          <div class="footer-name">Shirley CHEN 陳思琦</div>
-          <p>企業傳訊 · 媒體關係 · 財經公關</p>
-        </div>
-        <div>
-          <strong>聯絡方式</strong>
-          <a href={`mailto:${site.email}`}>{site.email}</a>
-          <span>香港</span>
-        </div>
-        <div>
-          <strong>專業連結</strong>
-          <a href={site.linkedin} target="_blank" rel="noreferrer">LinkedIn</a>
-        </div>
-        <div class="footer-copy">© {new Date().getFullYear()} Shirley CHEN 陳思琦</div>
-      </div>
-    </footer>
-    <script is:inline>
-      const menuButton = document.querySelector('.menu-button');
-      const mobileNav = document.querySelector('.mobile-nav');
-      menuButton?.addEventListener('click', () => {
-        const open = menuButton.getAttribute('aria-expanded') === 'true';
-        menuButton.setAttribute('aria-expanded', String(!open));
-        if (mobileNav) mobileNav.hidden = open;
-      });
-    </script>
-  </body>
+<html lang="zh-Hant-HK" data-lang="zh">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#061b31" />
+  <meta name="description" content={site.intro.zh} />
+  <title>{titleZh ? `${titleZh} | Shirley CHEN` : 'Shirley CHEN 陳思琦 | 企業傳訊 · 媒體關係 · 財經公關'}</title>
+  <script is:inline>
+    (() => {
+      const saved = localStorage.getItem('shirley-lang');
+      const lang = saved === 'en' ? 'en' : 'zh';
+      document.documentElement.dataset.lang = lang;
+      document.documentElement.lang = lang === 'en' ? 'en-HK' : 'zh-Hant-HK';
+    })();
+  </script>
+</head>
+<body>
+<header class="site-header">
+  <div class="nav-wrap shell">
+    <a class="brand" href="/" aria-label="Shirley CHEN">
+      <strong>Shirley CHEN</strong><span class="zh-only">陳思琦</span>
+    </a>
+    <nav class="main-nav" aria-label="Primary navigation">
+      {nav.map(item => <a class:list={[path === item.href && 'active']} href={item.href}><span class="zh-only">{item.label.zh}</span><span class="en-only">{item.label.en}</span></a>)}
+    </nav>
+    <div class="lang-switch" role="group" aria-label="Language">
+      <button type="button" data-set-lang="zh" aria-label="繁體中文">繁</button><span>/</span><button type="button" data-set-lang="en" aria-label="English">EN</button>
+    </div>
+    <a class="linkedin-link" href={site.linkedin} target="_blank" rel="noreferrer" aria-label="LinkedIn">in</a>
+    <button class="menu-button" type="button" aria-label="Menu" aria-expanded="false"><span></span><span></span><span></span></button>
+  </div>
+  <div class="mobile-nav shell" hidden>
+    {nav.map(item => <a href={item.href}><span class="zh-only">{item.label.zh}</span><span class="en-only">{item.label.en}</span></a>)}
+    <div class="mobile-lang"><button type="button" data-set-lang="zh">繁體中文</button><button type="button" data-set-lang="en">English</button></div>
+  </div>
+</header>
+<main><slot /></main>
+<footer class="footer">
+  <div class="shell footer-grid">
+    <div><div class="footer-name">Shirley CHEN <span class="zh-only">陳思琦</span></div><p><span class="zh-only">企業傳訊 · 媒體關係 · 財經公關</span><span class="en-only">Corporate Communications · Media Relations · Financial PR</span></p></div>
+    <div><strong><span class="zh-only">聯絡方式</span><span class="en-only">Contact</span></strong><a href={`mailto:${site.email}`}>{site.email}</a><span><span class="zh-only">香港</span><span class="en-only">Hong Kong</span></span></div>
+    <div><strong>LinkedIn</strong><a href={site.linkedin} target="_blank" rel="noreferrer">linkedin.com/in/shirley-chen-4bb594192</a></div>
+    <div class="footer-copy">© {new Date().getFullYear()} Shirley CHEN</div>
+  </div>
+</footer>
+<script is:inline>
+(() => {
+  const root = document.documentElement;
+  const setLang = (lang) => {
+    root.dataset.lang = lang;
+    root.lang = lang === 'en' ? 'en-HK' : 'zh-Hant-HK';
+    localStorage.setItem('shirley-lang', lang);
+    document.querySelectorAll('[data-set-lang]').forEach(btn => btn.classList.toggle('selected', btn.dataset.setLang === lang));
+    const titleZh = document.body.dataset.titleZh;
+    const titleEn = document.body.dataset.titleEn;
+    if (titleZh && titleEn) document.title = (lang === 'en' ? titleEn : titleZh) + ' | Shirley CHEN';
+  };
+  setLang(root.dataset.lang === 'en' ? 'en' : 'zh');
+  document.addEventListener('click', e => {
+    const btn = e.target.closest('[data-set-lang]');
+    if (btn) setLang(btn.dataset.setLang);
+  });
+  const menuButton = document.querySelector('.menu-button');
+  const mobileNav = document.querySelector('.mobile-nav');
+  menuButton?.addEventListener('click', () => {
+    const open = menuButton.getAttribute('aria-expanded') === 'true';
+    menuButton.setAttribute('aria-expanded', String(!open));
+    if (mobileNav) mobileNav.hidden = open;
+  });
+  document.querySelectorAll('.mobile-nav a').forEach(a => a.addEventListener('click', () => { if (mobileNav) mobileNav.hidden = true; menuButton?.setAttribute('aria-expanded','false'); }));
+})();
+</script>
+</body>
 </html>

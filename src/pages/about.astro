@@ -1,39 +1,9 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { site, education, languages } from '../data/site';
+import { education, languages, site } from '../data/site';
 ---
-<BaseLayout title="關於我">
-  <section class="page-hero shell">
-    <span class="eyebrow dark-text">ABOUT</span>
-    <h1>關於我</h1>
-    <p>企業傳訊、媒體關係與財經公關背景，立足香港的專業傳訊經驗。</p>
-  </section>
-  <section class="section shell about-grid">
-    <div class="about-photo"><img src="/images/shirley-chen-profile.jpg" alt="Shirley CHEN 陳思琦" /></div>
-    <div class="about-copy">
-      <span class="eyebrow dark-text">PROFESSIONAL PROFILE</span>
-      <h2>Shirley CHEN 陳思琦</h2>
-      {site.about.map((p) => <p>{p}</p>)}
-      <div class="about-contact-row">
-        <a href={`mailto:${site.email}`}>{site.email}</a>
-        <a href={site.linkedin} target="_blank" rel="noreferrer">LinkedIn →</a>
-      </div>
-    </div>
-  </section>
-  <section class="section soft-section">
-    <div class="shell two-column-info">
-      <div>
-        <div class="section-heading"><span>EDUCATION</span><h2>教育背景</h2></div>
-        <div class="info-stack">
-          {education.map((item) => (
-            <article><h3>{item.school}</h3><p>{item.degree}</p><span>{item.period}</span>{item.note && <small>{item.note}</small>}</article>
-          ))}
-        </div>
-      </div>
-      <div>
-        <div class="section-heading"><span>LANGUAGES</span><h2>語言能力</h2></div>
-        <div class="language-grid">{languages.map((lang) => <span>{lang}</span>)}</div>
-      </div>
-    </div>
-  </section>
+<BaseLayout titleZh="關於我" titleEn="About Me">
+  <section class="page-hero"><div class="shell"><span class="eyebrow"><span class="zh-only">關於我</span><span class="en-only">ABOUT ME</span></span><h1><span class="zh-only">關於 Shirley</span><span class="en-only">About Shirley</span></h1></div></section>
+  <section class="section"><div class="shell about-grid"><div class="about-photo"><img src="/images/shirley-chen-profile.jpg" alt="Shirley CHEN" /></div><div class="about-copy"><h2>Shirley CHEN <span class="zh-only">陳思琦</span></h2><div class="zh-only">{site.about.zh.map(p=><p>{p}</p>)}</div><div class="en-only">{site.about.en.map(p=><p>{p}</p>)}</div></div></div></section>
+  <section class="section soft-section"><div class="shell about-details"><div><h3><span class="zh-only">教育背景</span><span class="en-only">Education</span></h3>{education.map(e=><article class="detail-row"><strong>{e.school}</strong><span>{e.degree}</span><small>{e.period}</small><small><span class="zh-only">{e.note.zh}</span><span class="en-only">{e.note.en}</span></small></article>)}</div><div><h3><span class="zh-only">語言能力</span><span class="en-only">Languages</span></h3><ul class="simple-list zh-only">{languages.zh.map(l=><li>{l}</li>)}</ul><ul class="simple-list en-only">{languages.en.map(l=><li>{l}</li>)}</ul></div><div><h3><span class="zh-only">聯絡方式</span><span class="en-only">Contact</span></h3><a href={`mailto:${site.email}`}>{site.email}</a><a href={site.linkedin} target="_blank" rel="noreferrer">LinkedIn</a></div></div></section>
 </BaseLayout>

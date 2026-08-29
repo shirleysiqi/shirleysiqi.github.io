@@ -2,24 +2,7 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { experience } from '../data/site';
 ---
-<BaseLayout title="工作經歷">
-  <section class="page-hero shell">
-    <span class="eyebrow dark-text">EXPERIENCE</span>
-    <h1>工作經歷</h1>
-    <p>由財經公關顧問、企業及持份者傳訊，到金融機構企業傳訊的職業發展軌跡。</p>
-  </section>
-  <section class="section shell experience-list">
-    {experience.map((job, i) => (
-      <article class="experience-item">
-        <div class="experience-index">0{i + 1}</div>
-        <div class="experience-date">{job.period}</div>
-        <div class="experience-content">
-          <h2>{job.company}</h2>
-          <h3>{job.role}</h3>
-          <p class="lead-small">{job.summary}</p>
-          <ul>{job.bullets.map((bullet) => <li>{bullet}</li>)}</ul>
-        </div>
-      </article>
-    ))}
-  </section>
+<BaseLayout titleZh="工作經歷" titleEn="Work Experience">
+  <section class="page-hero"><div class="shell"><span class="eyebrow"><span class="zh-only">工作經歷</span><span class="en-only">WORK EXPERIENCE</span></span><h1><span class="zh-only">工作經歷</span><span class="en-only">Work Experience</span></h1><p><span class="zh-only">從財經公關、公眾及持份者傳訊，到金融機構企業傳訊的職業發展。</span><span class="en-only">A career path spanning financial PR, public and stakeholder communications, and in-house corporate communications in financial services.</span></p></div></section>
+  <section class="section"><div class="shell experience-list">{experience.map((item,i)=><article class="experience-item"><div class="experience-index">0{i+1}</div><div class="experience-date">{item.period}</div><div class="experience-content"><h2>{item.company}</h2><h3><span class="zh-only">{item.role.zh}</span><span class="en-only">{item.role.en}</span></h3><p class="lead-small"><span class="zh-only">{item.summary.zh}</span><span class="en-only">{item.summary.en}</span></p><ul class="zh-only">{item.bullets.zh.map(b=><li>{b}</li>)}</ul><ul class="en-only">{item.bullets.en.map(b=><li>{b}</li>)}</ul></div></article>)}</div></section>
 </BaseLayout>
