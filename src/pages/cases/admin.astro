@@ -1,7 +1,5 @@
 ---
 import '../../styles/global.css';
-import { defaultContent } from '../../lib/defaultContent';
-const fallbackContent = JSON.stringify(defaultContent);
 ---
 <!doctype html>
 <html lang="zh-Hant-HK">
@@ -9,68 +7,307 @@ const fallbackContent = JSON.stringify(defaultContent);
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex" />
-  <title>Admin | Shirley CHEN</title>
+  <meta name="googlebot" content="noindex, nofollow, noarchive, nosnippet, noimageindex" />
+  <title>GitHub Case Admin | Shirley CHEN</title>
 </head>
 <body class="admin-body">
   <div class="admin-login" id="loginPanel">
-    <div class="admin-login-card"><div class="admin-lock">SC</div><h1>網站管理</h1><p>登入後可直接更新案例、圖片及網站文字，不需要再上傳 GitHub。</p><label>Email<input id="loginEmail" type="email" autocomplete="username" value="Shirley.chensiqi@gmail.com" /></label><label>Password<input id="loginPassword" type="password" autocomplete="current-password" /></label><button class="button primary" id="loginButton">登入</button><p class="admin-error" id="loginError" hidden></p><a href="/">← 返回網站</a></div>
+    <div class="admin-login-card admin-login-card-wide">
+      <div class="admin-lock">SC</div>
+      <h1>網站管理</h1>
+      <p>直接連接你的 GitHub repository。Token 只用於這個瀏覽器工作階段，不會寫入網站代碼或 GitHub repository。</p>
+
+      <label>GitHub Fine-grained Token
+        <input id="githubToken" type="password" autocomplete="off" placeholder="github_pat_..." />
+      </label>
+      <label class="check-label admin-remember"><input id="rememberSession" type="checkbox" /> 只在目前分頁工作階段記住 Token</label>
+      <button class="button primary" id="githubLogin">連接 GitHub</button>
+      <p class="admin-error" id="adminError" hidden></p>
+      <div class="admin-token-help">
+        <strong>第一次使用？</strong>
+        <p>Token 只需要授權 <code>shirleysiqi/shirleysiqi.github.io</code>，Repository permission 設為 <code>Contents: Read and write</code>。完整步驟見 ZIP 內的 <code>SETUP_GUIDE.md</code>。</p>
+      </div>
+      <a href="/cases/">← 返回案例展示</a>
+    </div>
   </div>
 
-  <div class="admin-shell" id="adminApp" hidden data-fallback={fallbackContent}>
-    <aside class="admin-sidebar"><a class="admin-brand" href="/">Shirley CHEN</a><strong>網站管理</strong><button class="active" data-panel="cases">案例管理</button><button data-panel="content">網站內容</button><div class="admin-spacer"></div><a href="/cases/" target="_blank">查看案例頁</a><a href="/" target="_blank">查看首頁</a><button id="logout">登出</button></aside>
-    <main class="admin-main">
-      <section id="casesPanel">
-        <div class="admin-top"><div><span>CASE MANAGEMENT</span><h1>案例管理</h1></div><div class="admin-top-actions"><button class="button primary" id="newCase">＋ 新增案例</button></div></div>
-        <div class="admin-notice"><strong>V8：</strong>儲存後資料直接寫入 Supabase；圖片直接上傳至 Storage。公開案例會即時出現在網站，不需要 Commit 或重新部署。</div>
-        <div class="admin-table" id="adminTable"></div>
-      </section>
+  <div class="admin-shell" id="adminApp" hidden>
+    <aside class="admin-sidebar">
+      <a class="admin-brand" href="/">Shirley CHEN</a><strong>GitHub 網站管理</strong>
+      <button data-admin-filter="all" class="active">全部案例</button>
+      <button data-admin-filter="media">媒體活動</button>
+      <button data-admin-filter="corporate">企業活動</button>
+      <button data-admin-filter="esg">ESG 及持份者參與</button>
+      <div class="admin-spacer"></div>
+      <span class="admin-connection" id="connectionState">GitHub 已連接</span>
+      <a href="/cases/" target="_blank" rel="noreferrer">查看公開頁面</a>
+      <button id="logout">登出</button>
+    </aside>
 
-      <section id="contentPanel" hidden>
-        <div class="admin-top"><div><span>SITE CONTENT</span><h1>網站內容</h1></div><div class="admin-top-actions"><button class="button primary" id="saveContent">儲存網站內容</button></div></div>
-        <div class="admin-notice">修改後按「儲存網站內容」，首頁、工作經歷及關於我頁面會讀取最新內容。</div>
-        <div class="content-editor" id="contentEditor"></div>
-      </section>
+    <main class="admin-main">
+      <div class="admin-top">
+        <div><span>GITHUB NATIVE CMS</span><h1>案例管理</h1></div>
+        <div class="admin-top-actions">
+          <button class="button ghost" id="reloadRemote">重新載入 GitHub</button>
+          <button class="button primary" id="newCase">＋ 新增案例</button>
+        </div>
+      </div>
+
+      <div class="admin-notice github-admin-notice">
+        <strong>V8-GH：</strong>新增或修改後先按「儲存到待發佈」，所有改動只留在目前頁面。最後按右上方／頁底的「發佈到網站」，系統會一次建立 GitHub commit，然後 GitHub Pages 自動部署。你不需要再下載 ZIP 或手動上傳 code。
+      </div>
+
+      <div class="admin-publishbar" id="publishBar" hidden>
+        <div><strong id="dirtyCount">有未發佈變更</strong><span>尚未寫入 GitHub。</span></div>
+        <button class="button primary" id="publishAll">發佈到網站</button>
+      </div>
+
+      <div class="admin-table" id="adminTable"><div class="asset-empty">正在讀取 GitHub 案例資料…</div></div>
     </main>
   </div>
 
   <dialog class="edit-dialog edit-dialog-wide" id="caseDialog">
-    <form id="caseForm"><div class="dialog-header"><div><span>CASE EDITOR</span><h2 id="dialogTitle">新增案例</h2></div><button type="button" class="close-dialog" id="closeDialog">×</button></div><input type="hidden" id="caseId" /><div class="editor-scroll">
-      <section class="editor-section"><h3>基本資料</h3><div class="form-grid"><label>分類<select id="category"><option value="media">媒體活動 / Media Events</option><option value="corporate">企業活動 / Corporate Events</option><option value="esg">ESG 及持份者參與 / ESG & Stakeholder Engagement</option></select></label><label>日期<input id="dateLabel" placeholder="2026.08" /></label><label class="span-2">中文標題<input id="titleZh" required /></label><label class="span-2">English title<input id="titleEn" required /></label><label class="span-2">公司／機構<input id="company" /></label><label class="span-2">中文簡介<textarea id="summaryZh" rows="4"></textarea></label><label class="span-2">English summary<textarea id="summaryEn" rows="4"></textarea></label><label>排序<input id="sortOrder" type="number" value="0" /></label><label class="toggle-label"><input id="published" type="checkbox" checked /> 公開顯示</label></div></section>
-      <section class="editor-section"><div class="editor-section-title"><div><h3>封面圖片</h3><p>JPG / PNG / WebP</p></div><label class="button ghost admin-file-button">選擇封面<input id="coverInput" type="file" accept="image/jpeg,image/png,image/webp" hidden /></label></div><div class="asset-preview-large" id="coverPreview"><span>尚未上傳封面</span></div></section>
-      <section class="editor-section"><div class="editor-section-title"><div><h3>活動圖片</h3><p>可一次選取多張。</p></div><label class="button ghost admin-file-button">＋ 加入圖片<input id="galleryInput" type="file" accept="image/jpeg,image/png,image/webp" multiple hidden /></label></div><div class="asset-editor-grid" id="galleryEditor"></div></section>
-      <section class="editor-section"><div class="editor-section-title"><div><h3>媒體報導</h3><p>媒體名稱、標題、日期、截圖及原文連結。</p></div><button class="button ghost" id="addCoverage" type="button">＋ 新增媒體報導</button></div><div id="coverageEditor"></div></section>
-    </div><div class="dialog-actions"><button class="button ghost" type="button" id="cancelEdit">取消</button><button class="button primary" type="submit">儲存案例</button></div></form>
+    <form id="caseForm">
+      <div class="dialog-header"><div><span>CASE EDITOR</span><h2 id="dialogTitle">新增案例</h2></div><button type="button" class="close-dialog" id="closeDialog">×</button></div>
+      <input type="hidden" id="caseId" />
+      <div class="editor-scroll">
+        <section class="editor-section"><h3>基本資料</h3><div class="form-grid">
+          <label>分類<select id="category"><option value="media">媒體活動 / Media Events</option><option value="corporate">企業活動 / Corporate Events</option><option value="esg">ESG 及持份者參與 / ESG & Stakeholder Engagement</option></select></label>
+          <label>日期<input id="date" placeholder="2026.08" /></label>
+          <label class="span-2">中文標題<input id="titleZh" required /></label>
+          <label class="span-2">English title<input id="titleEn" required /></label>
+          <label class="span-2">公司／機構<input id="company" /></label>
+          <label class="span-2">中文簡介<textarea id="summaryZh" rows="4"></textarea></label>
+          <label class="span-2">English summary<textarea id="summaryEn" rows="4"></textarea></label>
+          <label class="check-label"><input id="published" type="checkbox" checked /> 對外公開</label>
+        </div></section>
+
+        <section class="editor-section"><div class="editor-section-head"><h3>案例封面</h3><label class="button ghost admin-file-button">選擇封面<input id="coverInput" type="file" accept="image/jpeg,image/png,image/webp" hidden /></label></div><div class="cover-admin-preview" id="coverPreview"><span>尚未選擇封面圖片</span></div></section>
+
+        <section class="editor-section"><div class="editor-section-head"><div><h3>活動圖片</h3><p>可以一次選擇多張。圖片會先在瀏覽器壓縮，再於發佈時寫入 GitHub。</p></div><label class="button ghost admin-file-button">＋ 加入活動圖片<input id="galleryInput" type="file" accept="image/jpeg,image/png,image/webp" multiple hidden /></label></div><div class="asset-editor-grid" id="galleryEditor"></div></section>
+
+        <section class="editor-section"><div class="editor-section-head"><div><h3>媒體報導</h3><p>每則可加入媒體名稱、標題、日期、截圖及公開原文連結。</p></div><button type="button" class="button ghost" id="addCoverage">＋ 新增媒體報導</button></div><div class="coverage-editor" id="coverageEditor"></div></section>
+      </div>
+      <div class="dialog-footer"><button type="button" class="button ghost" id="cancelEdit">取消</button><button class="button primary" type="submit">儲存到待發佈</button></div>
+    </form>
   </dialog>
 
-<script>
-import { supabase, supabaseConfigured } from '../../lib/supabaseClient';
-const $=(id:string)=>document.getElementById(id)!; const esc=(v='')=>String(v).replace(/[&<>'"]/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#039;','"':'&quot;'}[ch]));
-const cat:any={media:['媒體活動','Media Events'],corporate:['企業活動','Corporate Events'],esg:['ESG 及持份者參與','ESG & Stakeholder Engagement']};
-let cases:any[]=[]; let editing:any={cover_url:'',gallery:[],coverage:[]}; let siteContent:any=JSON.parse(($('adminApp') as HTMLElement).dataset.fallback||'{}');
-const loginPanel=$('loginPanel'), app=$('adminApp');
-function msg(text:string){alert(text)}
-async function boot(){if(!supabaseConfigured||!supabase){$('loginError').textContent='Supabase 尚未設定。請先完成 SETUP_GUIDE.md 的一次性設定。';$('loginError').hidden=false;return} const {data:{session}}=await supabase.auth.getSession(); if(session) showApp(); else loginPanel.removeAttribute('hidden')}
-async function showApp(){loginPanel.setAttribute('hidden','');app.removeAttribute('hidden');await Promise.all([loadCases(),loadContent()]);}
-$('loginButton').addEventListener('click',async()=>{if(!supabase)return;const email=(($('loginEmail') as HTMLInputElement).value||'').trim(),password=(($('loginPassword') as HTMLInputElement).value||'');const {error}=await supabase.auth.signInWithPassword({email,password});if(error){$('loginError').textContent=error.message;$('loginError').hidden=false;return}showApp()});
-$('logout').addEventListener('click',async()=>{await supabase?.auth.signOut();location.reload()});
-document.querySelectorAll('[data-panel]').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('[data-panel]').forEach(x=>x.classList.toggle('active',x===b));$('casesPanel').hidden=(b as HTMLElement).dataset.panel!=='cases';$('contentPanel').hidden=(b as HTMLElement).dataset.panel!=='content'}));
-async function loadCases(){if(!supabase)return;const {data,error}=await supabase.from('cases').select('*').order('sort_order',{ascending:true}).order('created_at',{ascending:false});if(error){msg(error.message);return}cases=data||[];renderTable()}
-function renderTable(){const el=$('adminTable');el.innerHTML=`<div class="admin-row admin-row-head"><span>案例</span><span>分類</span><span>日期</span><span>狀態</span><span>操作</span></div>`+(cases.length?cases.map(x=>`<div class="admin-row" data-id="${x.id}"><span><strong>${esc(x.title_zh)}</strong><small>${esc(x.title_en)}</small></span><span>${esc(x.category_zh)}</span><span>${esc(x.date_label||'—')}</span><span><i class="status ${x.published?'live':''}">${x.published?'已公開':'草稿'}</i></span><span class="row-actions"><button data-action="edit">編輯</button><button data-action="delete">刪除</button></span></div>`).join(''):`<div class="asset-empty">尚未建立案例</div>`)}
-const dialog=$('caseDialog') as HTMLDialogElement;
-function openCase(x?:any){const v=x?structuredClone(x):{};($('caseId') as HTMLInputElement).value=v.id||'';($('category') as HTMLSelectElement).value=v.category||'media';($('dateLabel') as HTMLInputElement).value=v.date_label||'';($('titleZh') as HTMLInputElement).value=v.title_zh||'';($('titleEn') as HTMLInputElement).value=v.title_en||'';($('company') as HTMLInputElement).value=v.company||'';($('summaryZh') as HTMLTextAreaElement).value=v.summary_zh||'';($('summaryEn') as HTMLTextAreaElement).value=v.summary_en||'';($('sortOrder') as HTMLInputElement).value=String(v.sort_order||0);($('published') as HTMLInputElement).checked=v.published!==false;editing={cover_url:v.cover_url||'',gallery:Array.isArray(v.gallery)?v.gallery:[],coverage:Array.isArray(v.coverage)?v.coverage:[]};$('dialogTitle').textContent=v.id?'修改案例':'新增案例';renderAssets();dialog.showModal()}
-$('newCase').addEventListener('click',()=>openCase());$('closeDialog').addEventListener('click',()=>dialog.close());$('cancelEdit').addEventListener('click',()=>dialog.close());
-$('adminTable').addEventListener('click',async e=>{const b=(e.target as HTMLElement).closest('[data-action]') as HTMLElement|null;if(!b)return;const id=(b.closest('[data-id]') as HTMLElement).dataset.id;const row=cases.find(x=>x.id===id);if(b.dataset.action==='edit')openCase(row);if(b.dataset.action==='delete'&&confirm('確定刪除此案例？')){const {error}=await supabase!.from('cases').delete().eq('id',id);if(error)msg(error.message);else loadCases()}});
-function renderAssets(){$('coverPreview').innerHTML=editing.cover_url?`<img src="${esc(editing.cover_url)}" alt=""><div class="asset-preview-actions"><button type="button" data-remove-cover>移除</button></div>`:'<span>尚未上傳封面</span>';$('galleryEditor').innerHTML=editing.gallery.length?editing.gallery.map((g:any,i:number)=>`<div class="asset-editor-card" data-gallery-index="${i}"><img src="${esc(g.url)}" alt=""><div class="asset-editor-actions"><button type="button" data-move="up" ${i===0?'disabled':''}>↑</button><button type="button" data-move="down" ${i===editing.gallery.length-1?'disabled':''}>↓</button><button type="button" data-remove-gallery>刪除</button></div></div>`).join(''):'<div class="asset-empty">尚未加入活動圖片</div>';$('coverageEditor').innerHTML=editing.coverage.length?editing.coverage.map((c:any,i:number)=>`<article class="coverage-editor-card" data-coverage-index="${i}"><div class="coverage-editor-head"><strong>媒體報導 ${String(i+1).padStart(2,'0')}</strong><button type="button" data-remove-coverage>刪除</button></div><div class="form-grid compact-grid"><label>媒體名稱<input data-c-field="media" value="${esc(c.media||'')}"></label><label>日期<input data-c-field="date" value="${esc(c.date||'')}"></label><label class="span-2">中文報導標題<input data-c-field="title_zh" value="${esc(c.title_zh||'')}"></label><label class="span-2">English headline<input data-c-field="title_en" value="${esc(c.title_en||'')}"></label><label class="span-2">公開原文連結<input type="url" data-c-field="url" value="${esc(c.url||'')}" placeholder="https://..."></label></div><div class="coverage-upload-row"><div class="coverage-admin-shot">${c.screenshot_url?`<img src="${esc(c.screenshot_url)}" alt="">`:'<span>尚未上傳報導截圖</span>'}</div><label class="button ghost admin-file-button">${c.screenshot_url?'更換截圖':'上傳截圖'}<input data-coverage-shot type="file" accept="image/jpeg,image/png,image/webp" hidden></label>${c.screenshot_url?'<button type="button" class="button ghost" data-remove-shot>移除截圖</button>':''}</div></article>`).join(''):'<div class="asset-empty">尚未加入媒體報導</div>'}
-async function uploadImage(file:File, folder:string){if(!supabase)throw new Error('Supabase unavailable');const ext=(file.name.split('.').pop()||'jpg').toLowerCase().replace('jpeg','jpg');const name=`${crypto.randomUUID()}.${ext}`;const path=`${folder}/${name}`;const {error}=await supabase.storage.from('portfolio-media').upload(path,file,{cacheControl:'3600',upsert:false});if(error)throw error;return supabase.storage.from('portfolio-media').getPublicUrl(path).data.publicUrl}
-$('coverInput').addEventListener('change',async e=>{const f=(e.target as HTMLInputElement).files?.[0];if(!f)return;try{editing.cover_url=await uploadImage(f,'covers');renderAssets()}catch(err:any){msg(err.message)}(e.target as HTMLInputElement).value=''});$('coverPreview').addEventListener('click',e=>{if((e.target as HTMLElement).closest('[data-remove-cover]')){editing.cover_url='';renderAssets()}});
-$('galleryInput').addEventListener('change',async e=>{for(const f of Array.from((e.target as HTMLInputElement).files||[])){try{editing.gallery.push({url:await uploadImage(f,'gallery'),caption_zh:'',caption_en:''})}catch(err:any){msg(err.message)}}renderAssets();(e.target as HTMLInputElement).value=''});$('galleryEditor').addEventListener('click',e=>{const card=(e.target as HTMLElement).closest('[data-gallery-index]') as HTMLElement|null;if(!card)return;const i=Number(card.dataset.galleryIndex);if((e.target as HTMLElement).closest('[data-remove-gallery]'))editing.gallery.splice(i,1);const m=((e.target as HTMLElement).closest('[data-move]') as HTMLElement|null)?.dataset.move;if(m==='up'&&i>0)[editing.gallery[i-1],editing.gallery[i]]=[editing.gallery[i],editing.gallery[i-1]];if(m==='down'&&i<editing.gallery.length-1)[editing.gallery[i+1],editing.gallery[i]]=[editing.gallery[i],editing.gallery[i+1]];renderAssets()});
-$('addCoverage').addEventListener('click',()=>{editing.coverage.push({media:'',date:'',title_zh:'',title_en:'',url:'',screenshot_url:''});renderAssets()});$('coverageEditor').addEventListener('input',e=>{const card=(e.target as HTMLElement).closest('[data-coverage-index]') as HTMLElement|null;const field=(e.target as HTMLInputElement).dataset.cField;if(card&&field)editing.coverage[Number(card.dataset.coverageIndex)][field]=(e.target as HTMLInputElement).value});$('coverageEditor').addEventListener('change',async e=>{if(!(e.target as HTMLInputElement).matches('[data-coverage-shot]'))return;const card=(e.target as HTMLElement).closest('[data-coverage-index]') as HTMLElement;const f=(e.target as HTMLInputElement).files?.[0];if(!f)return;try{editing.coverage[Number(card.dataset.coverageIndex)].screenshot_url=await uploadImage(f,'coverage');renderAssets()}catch(err:any){msg(err.message)}});$('coverageEditor').addEventListener('click',e=>{const card=(e.target as HTMLElement).closest('[data-coverage-index]') as HTMLElement|null;if(!card)return;const i=Number(card.dataset.coverageIndex);if((e.target as HTMLElement).closest('[data-remove-coverage]')){editing.coverage.splice(i,1);renderAssets()}if((e.target as HTMLElement).closest('[data-remove-shot]')){editing.coverage[i].screenshot_url='';renderAssets()}});
-$('caseForm').addEventListener('submit',async e=>{e.preventDefault();const id=(($('caseId') as HTMLInputElement).value||crypto.randomUUID());const category=($('category') as HTMLSelectElement).value;const payload={id,category,category_zh:cat[category][0],category_en:cat[category][1],date_label:($('dateLabel') as HTMLInputElement).value.trim(),title_zh:($('titleZh') as HTMLInputElement).value.trim(),title_en:($('titleEn') as HTMLInputElement).value.trim(),company:($('company') as HTMLInputElement).value.trim(),summary_zh:($('summaryZh') as HTMLTextAreaElement).value.trim(),summary_en:($('summaryEn') as HTMLTextAreaElement).value.trim(),cover_url:editing.cover_url,gallery:editing.gallery,coverage:editing.coverage,published:($('published') as HTMLInputElement).checked,sort_order:Number(($('sortOrder') as HTMLInputElement).value||0),updated_at:new Date().toISOString()};const {error}=await supabase!.from('cases').upsert(payload);if(error){msg(error.message);return}dialog.close();await loadCases();msg('已儲存，公開案例會直接更新到網站。')});
-async function loadContent(){if(!supabase)return;const {data}=await supabase.from('site_content').select('payload').eq('key','main').maybeSingle();if(data?.payload)siteContent=data.payload;renderContentEditor()}
-function area(label:string,path:string,value:string,rows=3){return `<label class="content-field"><span>${label}</span><textarea rows="${rows}" data-content-path="${path}">${esc(value||'')}</textarea></label>`}
-function renderContentEditor(){const s=siteContent.site||{};const caps=siteContent.capabilities||[];const ex=siteContent.experience||[];$('contentEditor').innerHTML=`<section class="editor-section"><h3>首頁 Hero</h3><div class="content-form-grid">${area('繁中定位','site.title.zh',s.title?.zh)}${area('English positioning','site.title.en',s.title?.en)}${area('繁中簡介','site.intro.zh',s.intro?.zh,5)}${area('English introduction','site.intro.en',s.intro?.en,5)}</div></section><section class="editor-section"><h3>我的專業</h3>${caps.map((c:any,i:number)=>`<div class="content-repeat"><strong>0${i+1}</strong><div class="content-form-grid">${area('繁中標題',`capabilities.${i}.title.zh`,c.title?.zh)}${area('English title',`capabilities.${i}.title.en`,c.title?.en)}${area('繁中內容',`capabilities.${i}.text.zh`,c.text?.zh,4)}${area('English text',`capabilities.${i}.text.en`,c.text?.en,4)}</div></div>`).join('')}</section><section class="editor-section"><h3>關於我</h3><div class="content-form-grid">${area('繁中第一段','site.about.zh.0',s.about?.zh?.[0],5)}${area('English paragraph 1','site.about.en.0',s.about?.en?.[0],5)}${area('繁中第二段','site.about.zh.1',s.about?.zh?.[1],5)}${area('English paragraph 2','site.about.en.1',s.about?.en?.[1],5)}</div></section><section class="editor-section"><h3>工作經歷</h3>${ex.map((x:any,i:number)=>`<div class="content-repeat"><strong>${esc(x.company)}</strong><div class="content-form-grid">${area('公司',`experience.${i}.company`,x.company,2)}${area('期間',`experience.${i}.period`,x.period,2)}${area('繁中職位',`experience.${i}.role.zh`,x.role?.zh,2)}${area('English role',`experience.${i}.role.en`,x.role?.en,2)}${area('繁中摘要',`experience.${i}.summary.zh`,x.summary?.zh,4)}${area('English summary',`experience.${i}.summary.en`,x.summary?.en,4)}${area('繁中要點（每行一項）',`experience.${i}.bullets.zh`,(x.bullets?.zh||[]).join('\n'),6)}${area('English bullets (one per line)',`experience.${i}.bullets.en`,(x.bullets?.en||[]).join('\n'),6)}</div></div>`).join('')}</section>`}
-function setPath(obj:any,path:string,value:string){const parts=path.split('.');let cur=obj;for(let i=0;i<parts.length-1;i++){const p=parts[i];if(cur[p]==null)cur[p]=/^\d+$/.test(parts[i+1])?[]:{};cur=cur[p]}const last=parts[parts.length-1];if(path.includes('.bullets.'))cur[last]=value.split('\n').map(x=>x.trim()).filter(Boolean);else cur[last]=value}
-$('contentEditor').addEventListener('input',e=>{const t=e.target as HTMLTextAreaElement;const path=t.dataset.contentPath;if(path)setPath(siteContent,path,t.value)});$('saveContent').addEventListener('click',async()=>{const {error}=await supabase!.from('site_content').upsert({key:'main',payload:siteContent,updated_at:new Date().toISOString()});if(error)msg(error.message);else msg('網站內容已儲存。')});
-boot();
+  <dialog class="publish-dialog" id="publishDialog">
+    <div class="publish-dialog-card">
+      <span>GITHUB PUBLISH</span>
+      <h2>發佈到網站</h2>
+      <p id="publishStatus">正在準備 GitHub commit…</p>
+      <div class="publish-progress"><i id="publishProgress"></i></div>
+      <pre id="publishDetail"></pre>
+      <button class="button primary" id="publishClose" hidden>完成</button>
+    </div>
+  </dialog>
+
+<script is:inline>
+(() => {
+  const OWNER='shirleysiqi';
+  const REPO='shirleysiqi.github.io';
+  const BRANCH='main';
+  const API='https://api.github.com';
+  const API_VERSION='2026-03-10';
+  const CASES_PATH='src/data/cases.json';
+  const cat={media:['媒體活動','Media Events'],corporate:['企業活動','Corporate Events'],esg:['ESG 及持份者參與','ESG & Stakeholder Engagement']};
+
+  let token='';
+  let items=[];
+  let originalItems=[];
+  let filter='all';
+  let editing={cover:null,gallery:[],coverage:[]};
+  let dirty=false;
+  const $=id=>document.getElementById(id);
+  const loginPanel=$('loginPanel'), app=$('adminApp'), table=$('adminTable'), dialog=$('caseDialog'), form=$('caseForm');
+  const pubDialog=$('publishDialog');
+  const esc=(v='')=>String(v).replace(/[&<>'"]/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#039;','"':'&quot;'}[ch]));
+  const clone=v=>JSON.parse(JSON.stringify(v));
+  const uid=p=>`${p}-${Date.now().toString(36)}-${Math.random().toString(36).slice(2,8)}`;
+  const mediaSrc=obj=>obj?.src||obj?.dataUrl||'';
+
+  function ghHeaders(extra={}){return {Accept:'application/vnd.github+json',Authorization:`Bearer ${token}`,'X-GitHub-Api-Version':API_VERSION,...extra};}
+  async function gh(path,opts={}){
+    const res=await fetch(`${API}${path}`,{...opts,headers:ghHeaders(opts.headers||{})});
+    if(!res.ok){let msg=`GitHub ${res.status}`;try{const j=await res.json();msg=j.message||msg;}catch{} throw new Error(msg);}
+    if(res.status===204)return null;
+    return res.json();
+  }
+
+  function bytesToBase64(bytes){let s='';const step=0x8000;for(let i=0;i<bytes.length;i+=step)s+=String.fromCharCode(...bytes.subarray(i,i+step));return btoa(s);}
+  function utf8ToBase64(text){return bytesToBase64(new TextEncoder().encode(text));}
+  function dataUrlToBase64(dataUrl){return dataUrl.split(',')[1]||'';}
+  function decodeGitHubBase64(content){const bin=atob((content||'').replace(/\n/g,''));const bytes=new Uint8Array(bin.length);for(let i=0;i<bin.length;i++)bytes[i]=bin.charCodeAt(i);return new TextDecoder().decode(bytes);}
+
+  async function verifyConnection(){
+    const [user,repo]=await Promise.all([gh('/user'),gh(`/repos/${OWNER}/${REPO}`)]);
+    $('connectionState').textContent=`GitHub：${user.login}`;
+    return repo;
+  }
+
+  async function loadCases(){
+    table.innerHTML='<div class="asset-empty">正在讀取 GitHub 案例資料…</div>';
+    const file=await gh(`/repos/${OWNER}/${REPO}/contents/${CASES_PATH}?ref=${encodeURIComponent(BRANCH)}`);
+    const parsed=JSON.parse(decodeGitHubBase64(file.content));
+    if(!Array.isArray(parsed))throw new Error('cases.json 格式不是陣列。');
+    items=parsed;
+    originalItems=clone(parsed);
+    dirty=false;
+    updateDirty();
+    render();
+  }
+
+  function render(){
+    const list=items.filter(x=>filter==='all'||x.category===filter);
+    if(!list.length){table.innerHTML='<div class="asset-empty">目前沒有這個分類的案例。</div>';return;}
+    table.innerHTML=`<div class="admin-row admin-row-head"><span>案例</span><span>分類</span><span>公司</span><span>日期</span><span>狀態</span><span>操作</span></div>`+list.map(x=>`<div class="admin-row" data-id="${esc(x.id)}"><span><strong>${esc(x.titleZh)}</strong><small>${esc(x.titleEn)}</small></span><span>${esc(cat[x.category]?.[0]||'')}</span><span>${esc(x.company||'—')}</span><span>${esc(x.date||'—')}</span><span><i class="status ${x.published!==false?'live':''}">${x.published!==false?'已公開':'草稿'}</i></span><span class="row-actions"><button data-action="edit">編輯</button><button data-action="delete">刪除</button></span></div>`).join('');
+  }
+
+  function setDirty(){dirty=true;updateDirty();}
+  function updateDirty(){
+    $('publishBar').hidden=!dirty;
+    $('dirtyCount').textContent=dirty?'有未發佈變更':'沒有未發佈變更';
+  }
+
+  async function compressImage(file,max=1800,quality=.86){
+    const dataUrl=await new Promise((resolve,reject)=>{const r=new FileReader();r.onload=()=>resolve(r.result);r.onerror=reject;r.readAsDataURL(file);});
+    const img=await new Promise((resolve,reject)=>{const i=new Image();i.onload=()=>resolve(i);i.onerror=reject;i.src=dataUrl;});
+    const scale=Math.min(1,max/Math.max(img.width,img.height));
+    const canvas=document.createElement('canvas');canvas.width=Math.round(img.width*scale);canvas.height=Math.round(img.height*scale);
+    canvas.getContext('2d').drawImage(img,0,0,canvas.width,canvas.height);
+    const out=canvas.toDataURL('image/jpeg',quality);
+    return {dataUrl:out,name:(file.name||'image').replace(/\.[^.]+$/,'.jpg'),mime:'image/jpeg',pending:true};
+  }
+
+  function renderCover(){
+    const el=$('coverPreview'),src=mediaSrc(editing.cover);
+    el.innerHTML=src?`<img src="${esc(src)}" alt=""><div class="asset-preview-actions"><button type="button" data-remove-cover>移除</button></div>`:'<span>尚未選擇封面圖片</span>';
+  }
+  function renderGallery(){
+    const el=$('galleryEditor');
+    el.innerHTML=editing.gallery.length?editing.gallery.map((g,i)=>`<div class="asset-editor-card" data-gallery-index="${i}"><img src="${esc(mediaSrc(g))}" alt=""><div class="asset-editor-actions"><button type="button" data-move="up" ${i===0?'disabled':''}>↑</button><button type="button" data-move="down" ${i===editing.gallery.length-1?'disabled':''}>↓</button><button type="button" data-remove-gallery>刪除</button></div></div>`).join(''):'<div class="asset-empty">尚未加入活動圖片</div>';
+  }
+  function renderCoverage(){
+    const el=$('coverageEditor');
+    el.innerHTML=editing.coverage.length?editing.coverage.map((c,i)=>`<article class="coverage-editor-card" data-coverage-index="${i}"><div class="coverage-editor-head"><strong>媒體報導 ${String(i+1).padStart(2,'0')}</strong><button type="button" data-remove-coverage>刪除</button></div><div class="form-grid compact-grid"><label>媒體名稱<input data-c-field="media" value="${esc(c.media||'')}"></label><label>日期<input data-c-field="date" value="${esc(c.date||'')}"></label><label class="span-2">中文報導標題<input data-c-field="titleZh" value="${esc(c.titleZh||'')}"></label><label class="span-2">English headline<input data-c-field="titleEn" value="${esc(c.titleEn||'')}"></label><label class="span-2">公開原文連結<input type="url" data-c-field="url" value="${esc(c.url||'')}" placeholder="https://..."></label></div><div class="coverage-upload-row"><div class="coverage-admin-shot">${mediaSrc(c.screenshot)?`<img src="${esc(mediaSrc(c.screenshot))}" alt="">`:'<span>尚未上傳報導截圖</span>'}</div><label class="button ghost admin-file-button">${mediaSrc(c.screenshot)?'更換截圖':'上傳截圖'}<input data-coverage-shot type="file" accept="image/jpeg,image/png,image/webp" hidden></label>${mediaSrc(c.screenshot)?'<button type="button" class="button ghost" data-remove-shot>移除截圖</button>':''}</div></article>`).join(''):'<div class="asset-empty">尚未加入媒體報導</div>';
+  }
+  const renderAssets=()=>{renderCover();renderGallery();renderCoverage();};
+
+  function openEditor(x){
+    const v=x?clone(x):{};
+    $('dialogTitle').textContent=v.id?'修改案例':'新增案例';
+    $('caseId').value=v.id||'';$('category').value=v.category||'media';$('date').value=v.date||'';$('titleZh').value=v.titleZh||'';$('titleEn').value=v.titleEn||'';$('company').value=v.company||'';$('summaryZh').value=v.summaryZh||'';$('summaryEn').value=v.summaryEn||'';$('published').checked=v.published!==false;
+    editing={cover:v.cover||(v.image?{src:v.image}:null),gallery:v.gallery||[],coverage:v.coverage||[]};
+    renderAssets();dialog.showModal();
+  }
+
+  $('coverInput').addEventListener('change',async e=>{const f=e.target.files?.[0];if(!f)return;editing.cover=await compressImage(f,1800,.86);renderCover();e.target.value='';});
+  $('coverPreview').addEventListener('click',e=>{if(e.target.closest('[data-remove-cover]')){editing.cover=null;renderCover();}});
+  $('galleryInput').addEventListener('change',async e=>{for(const f of [...(e.target.files||[])])editing.gallery.push(await compressImage(f,1800,.84));renderGallery();e.target.value='';});
+  $('galleryEditor').addEventListener('click',e=>{const card=e.target.closest('[data-gallery-index]');if(!card)return;const i=Number(card.dataset.galleryIndex);if(e.target.closest('[data-remove-gallery]'))editing.gallery.splice(i,1);const move=e.target.closest('[data-move]')?.dataset.move;if(move==='up'&&i>0)[editing.gallery[i-1],editing.gallery[i]]=[editing.gallery[i],editing.gallery[i-1]];if(move==='down'&&i<editing.gallery.length-1)[editing.gallery[i+1],editing.gallery[i]]=[editing.gallery[i],editing.gallery[i+1]];renderGallery();});
+  $('addCoverage').addEventListener('click',()=>{editing.coverage.push({id:uid('coverage'),media:'',date:'',titleZh:'',titleEn:'',url:'',screenshot:null});renderCoverage();});
+  $('coverageEditor').addEventListener('input',e=>{const card=e.target.closest('[data-coverage-index]'),field=e.target.dataset.cField;if(!card||!field)return;editing.coverage[Number(card.dataset.coverageIndex)][field]=e.target.value;});
+  $('coverageEditor').addEventListener('change',async e=>{if(!e.target.matches('[data-coverage-shot]'))return;const card=e.target.closest('[data-coverage-index]'),f=e.target.files?.[0];if(!f)return;editing.coverage[Number(card.dataset.coverageIndex)].screenshot=await compressImage(f,1900,.86);renderCoverage();});
+  $('coverageEditor').addEventListener('click',e=>{const card=e.target.closest('[data-coverage-index]');if(!card)return;const i=Number(card.dataset.coverageIndex);if(e.target.closest('[data-remove-coverage]')){editing.coverage.splice(i,1);renderCoverage();}if(e.target.closest('[data-remove-shot]')){editing.coverage[i].screenshot=null;renderCoverage();}});
+
+  form.addEventListener('submit',e=>{
+    e.preventDefault();
+    const id=$('caseId').value||uid('case');const category=$('category').value;
+    const entry={id,category,categoryZh:cat[category][0],categoryEn:cat[category][1],date:$('date').value.trim(),titleZh:$('titleZh').value.trim(),titleEn:$('titleEn').value.trim(),company:$('company').value.trim(),summaryZh:$('summaryZh').value.trim(),summaryEn:$('summaryEn').value.trim(),cover:editing.cover,gallery:editing.gallery,coverage:editing.coverage,published:$('published').checked};
+    const i=items.findIndex(x=>x.id===id);if(i>=0)items[i]=entry;else items.unshift(entry);
+    setDirty();render();dialog.close();
+  });
+
+  table.addEventListener('click',e=>{
+    const b=e.target.closest('[data-action]');if(!b)return;const id=b.closest('[data-id]').dataset.id;const idx=items.findIndex(x=>x.id===id);
+    if(b.dataset.action==='edit')openEditor(items[idx]);
+    if(b.dataset.action==='delete'&&confirm('確定刪除此案例？刪除會在下一次「發佈到網站」時生效。')){items.splice(idx,1);setDirty();render();}
+  });
+
+  document.querySelectorAll('[data-admin-filter]').forEach(b=>b.addEventListener('click',()=>{filter=b.dataset.adminFilter;document.querySelectorAll('[data-admin-filter]').forEach(x=>x.classList.toggle('active',x===b));render();}));
+  $('newCase').addEventListener('click',()=>openEditor());$('closeDialog').onclick=()=>dialog.close();$('cancelEdit').onclick=()=>dialog.close();
+
+  async function createBlob(content,encoding='base64'){
+    return gh(`/repos/${OWNER}/${REPO}/git/blobs`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({content,encoding})});
+  }
+
+  async function packageCasesAndTree(){
+    const tree=[];const out=clone(items);let uploads=0;
+    const addImage=async(asset,path)=>{
+      if(!asset)return null;
+      const src=mediaSrc(asset);if(!src)return null;
+      if(!src.startsWith('data:'))return {src,name:asset.name||''};
+      const blob=await createBlob(dataUrlToBase64(src));
+      tree.push({path,mode:'100644',type:'blob',sha:blob.sha});uploads++;
+      return {src:`/${path.replace(/^public\//,'')}`,name:path.split('/').pop()};
+    };
+
+    for(let n=0;n<out.length;n++){
+      const x=out[n];const base=`public/images/cases/${x.id}`;
+      x.cover=await addImage(x.cover,`${base}/cover.jpg`);
+      const newGallery=[];
+      for(let i=0;i<(x.gallery||[]).length;i++)newGallery.push(await addImage(x.gallery[i],`${base}/gallery-${String(i+1).padStart(2,'0')}.jpg`));
+      x.gallery=newGallery.filter(Boolean);
+      const newCoverage=[];
+      for(let i=0;i<(x.coverage||[]).length;i++){
+        const c=x.coverage[i];
+        newCoverage.push({...c,screenshot:await addImage(c.screenshot,`${base}/coverage-${String(i+1).padStart(2,'0')}.jpg`)});
+      }
+      x.coverage=newCoverage;
+    }
+    const jsonBlob=await createBlob(utf8ToBase64(JSON.stringify(out,null,2)));
+    tree.push({path:CASES_PATH,mode:'100644',type:'blob',sha:jsonBlob.sha});
+    return {tree,out,uploads};
+  }
+
+  function setProgress(pct,status,detail=''){$('publishProgress').style.width=`${pct}%`;$('publishStatus').textContent=status;$('publishDetail').textContent=detail;}
+
+  async function publish(){
+    if(!dirty)return;
+    pubDialog.showModal();$('publishClose').hidden=true;setProgress(5,'正在連接 GitHub…');
+    try{
+      const ref=await gh(`/repos/${OWNER}/${REPO}/git/ref/heads/${BRANCH}`);
+      const parentSha=ref.object.sha;
+      setProgress(15,'正在讀取目前版本…',`main: ${parentSha.slice(0,10)}`);
+      const commit=await gh(`/repos/${OWNER}/${REPO}/git/commits/${parentSha}`);
+      setProgress(25,'正在處理圖片與案例資料…');
+      const packed=await packageCasesAndTree();
+      setProgress(65,'正在建立單一 GitHub commit…',`${packed.uploads} 張新／更新圖片`);
+      const newTree=await gh(`/repos/${OWNER}/${REPO}/git/trees`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({base_tree:commit.tree.sha,tree:packed.tree})});
+      const newCommit=await gh(`/repos/${OWNER}/${REPO}/git/commits`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message:'Update case studies via website admin',tree:newTree.sha,parents:[parentSha]})});
+      setProgress(85,'正在更新 main branch…');
+      await gh(`/repos/${OWNER}/${REPO}/git/refs/heads/${BRANCH}`,{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify({sha:newCommit.sha,force:false})});
+      items=packed.out;originalItems=clone(packed.out);dirty=false;updateDirty();render();
+      setProgress(100,'發佈完成 ✓',`Commit: ${newCommit.sha.slice(0,10)}\nGitHub Actions 會自動重新部署網站，通常約 1–3 分鐘。`);
+      $('publishClose').hidden=false;
+    }catch(err){
+      setProgress(100,'發佈失敗',`${err.message}\n\n沒有成功更新 main branch。請保持此頁開啟，截圖這段訊息給我。`);$('publishClose').hidden=false;
+    }
+  }
+
+  $('publishAll').addEventListener('click',publish);
+  $('publishClose').addEventListener('click',()=>pubDialog.close());
+  $('reloadRemote').addEventListener('click',async()=>{if(dirty&&!confirm('重新載入會丟棄目前尚未發佈的修改，是否繼續？'))return;try{await loadCases();}catch(e){alert(`無法讀取 GitHub：${e.message}`);}});
+  $('logout').addEventListener('click',()=>{sessionStorage.removeItem('shirley-gh-token');location.reload();});
+
+  async function loginWith(t){
+    token=t.trim();if(!token)throw new Error('請輸入 GitHub Fine-grained Token。');
+    await verifyConnection();
+    if($('rememberSession').checked)sessionStorage.setItem('shirley-gh-token',token);
+    loginPanel.hidden=true;app.hidden=false;
+    await loadCases();
+  }
+  $('githubLogin').addEventListener('click',async()=>{
+    $('adminError').hidden=true;$('githubLogin').disabled=true;$('githubLogin').textContent='連接中…';
+    try{await loginWith($('githubToken').value);}catch(e){$('adminError').textContent=`無法連接：${e.message}`;$('adminError').hidden=false;token='';}
+    finally{$('githubLogin').disabled=false;$('githubLogin').textContent='連接 GitHub';}
+  });
+  $('githubToken').addEventListener('keydown',e=>{if(e.key==='Enter')$('githubLogin').click();});
+
+  const saved=sessionStorage.getItem('shirley-gh-token');
+  if(saved){$('rememberSession').checked=true;$('githubToken').value=saved;$('githubLogin').click();}
+})();
 </script>
-</body></html>
+</body>
+</html>

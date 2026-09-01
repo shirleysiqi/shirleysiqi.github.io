@@ -1,85 +1,55 @@
-# V8 一次性設定指南
+# V8-GH 一次性設定指南
 
-完成以下一次設定後，日後新增案例、上傳圖片、修改網站文字都不需要再進 GitHub 改 code。
+你只需要做一次 GitHub Token 設定。完成後，日常新增案例不需要再上傳 code。
 
-## 1. 建立 Supabase Project
+## A. 把 V8-GH 上傳到 GitHub（最後一次網站架構更新）
 
-1. 登入 Supabase，建立一個新 project。
-2. Project 建立後，進入 **SQL Editor**。
-3. 打開本專案的 `supabase/SETUP.sql`，複製全部內容到 SQL Editor，按 **Run**。
+把本 ZIP 的網站檔案取代目前 `shirleysiqi/shirleysiqi.github.io` repository 的對應檔案，commit 到 `main`。等 GitHub Actions 部署成功。
 
-這會建立：
-- `cases`：案例資料
-- `site_content`：首頁／工作經歷／關於我內容
-- `portfolio-media`：案例圖片 Storage bucket
-- RLS 權限規則
+之後正常案例更新不再需要手動上傳檔案。
 
-## 2. 建立唯一的 Admin 帳戶
+## B. 建立 Fine-grained Personal Access Token
 
-Supabase Dashboard：
+1. 登入 GitHub。
+2. 點右上角頭像 → **Settings**。
+3. 左側最下方附近選 **Developer settings**。
+4. 選 **Personal access tokens** → **Fine-grained tokens**。
+5. 點 **Generate new token**。
+6. Token name 可填：`Shirley Website Admin`。
+7. Expiration：建議選一個你方便管理的有效期，例如 90 days；到期後只需重新建立新 token，網站不需要改 code。
+8. Resource owner：選你的 GitHub 帳戶 `shirleysiqi`。
+9. Repository access：選 **Only select repositories**。
+10. 只選：`shirleysiqi.github.io`。
+11. Repository permissions 找到 **Contents**，設為 **Read and write**。
+12. 其他寫入權限不需要開啟。
+13. 產生 token 後，GitHub 通常只完整顯示一次。把它保存在你自己的密碼管理器。
 
-**Authentication → Users → Add user → Create new user**
+不要把 token 寫入網站代碼，也不要傳給其他人。
 
-Admin Email 請使用 `Shirley.chensiqi@gmail.com`，再設定只有你知道的 Password。V8 的 RLS 規則已限定只有這個 Email 可以寫入資料。
+## C. 第一次登入網站後台
 
-然後到 Authentication 的登入／註冊設定，**關閉公開 Email sign-up**。網站 V8 本身沒有註冊按鈕，但仍建議在 Supabase 關掉自行註冊，確保只有你建立的帳戶可以登入後台。
+開啟：
 
-## 3. 取得 Project URL 和 Key
-
-Supabase Dashboard：
-
-**Project Settings → API**
-
-取得：
-- Project URL
-- Publishable key / anon public key
-
-注意：前端只能使用 Publishable / anon key，**絕對不要放 service_role key**。
-
-## 4. 在 GitHub 加兩個 Secrets
-
-Repository：`shirleysiqi/shirleysiqi.github.io`
-
-進入：
-
-**Settings → Secrets and variables → Actions → New repository secret**
-
-新增：
-
-### Secret 1
-Name:
-`PUBLIC_SUPABASE_URL`
-
-Value：你的 Supabase Project URL。
-
-### Secret 2
-Name:
-`PUBLIC_SUPABASE_ANON_KEY`
-
-Value：你的 Publishable / anon public key。
-
-## 5. 第一次部署 V8
-
-把 V8 完整專案取代目前 GitHub repository 的網站代碼，Commit 到 `main`。
-
-之後進入 **Actions**，等部署工作顯示綠色勾號。
-
-## 6. 日後使用
-
-Admin：
 `https://shirleysiqi.github.io/cases/admin/`
 
-登入後：
-- 「案例管理」新增／修改／下架案例
-- 直接選 Mac / PC 裡面的圖片上傳
-- 加入活動 Gallery
-- 加入媒體報導截圖和原文連結
-- 「網站內容」修改首頁、工作經歷及關於我主要文字
+把 Fine-grained Token 貼到欄位，按 **連接 GitHub**。
 
-按儲存後資料直接進 Supabase，公開網站會在重新整理時讀取最新資料，**不需要 GitHub Commit，也不需要重新部署**。
+成功後會直接讀取 repository 裡目前的 `src/data/cases.json`。
 
-## 私隱及安全
+## D. 日常更新
 
-V8 繼續使用全站 `noindex / nofollow / noarchive / nosnippet` 以及 `robots.txt Disallow: /`，減少搜尋引擎收錄。
+1. 新增或編輯案例。
+2. 選封面、活動圖片、媒體報導截圖。
+3. 按「儲存到待發佈」。
+4. 可以繼續修改其他案例。
+5. 最後一次按「發佈到網站」。
+6. 系統會把所有變更一次 commit 到 GitHub `main`。
+7. GitHub Actions 自動部署，通常等候約數分鐘後公開頁便會更新。
 
-但 GitHub Pages 仍是公開網址；知道網址的人可以訪問。`portfolio-media` 是公開圖片 bucket，所以只應上傳適合公開展示的素材，不要放未發佈公司資料、私人記者聯絡資料、內部文件或其他機密內容。
+## E. 安全提醒
+
+- Token 等同於這個 repository 的內容寫入鑰匙，請自行保管。
+- 建議只授權這一個 repository，並只開 `Contents: Read and write`。
+- 不要使用 classic PAT 的廣泛 `repo` 權限，除非你清楚知道原因。
+- 不要把 token 放在 `site.ts`、`.env`（若會被打包到前端）、HTML、GitHub issue 或公開聊天內容。
+- 如果懷疑 token 洩漏，立即在 GitHub Settings → Developer settings → Personal access tokens 撤銷它，再建立一個新的。

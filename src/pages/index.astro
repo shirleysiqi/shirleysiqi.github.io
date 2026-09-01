@@ -1,19 +1,20 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { capabilities, experience, site } from '../data/site';
-const fallback = JSON.stringify({ site, capabilities, experience });
+import cases from '../data/cases.json';
+const featured = (cases as any[]).filter(c => c.published !== false).slice(0,3);
 ---
 <BaseLayout titleZh="首頁" titleEn="Home">
-  <section class="hero" id="homeHero" data-fallback={fallback}>
+  <section class="hero">
     <div class="hero-bg" aria-hidden="true"></div>
     <div class="hero-overlay" aria-hidden="true"></div>
     <div class="shell hero-grid">
       <div class="hero-copy">
-        <div class="hero-kicker"><span class="zh-only" id="heroKickerZh">{site.heroKicker.zh}</span><span class="en-only" id="heroKickerEn">{site.heroKicker.en}</span></div>
+        <div class="hero-kicker"><span class="zh-only">{site.heroKicker.zh}</span><span class="en-only">{site.heroKicker.en}</span></div>
         <h1><span>Shirley CHEN</span><em class="zh-only">陳思琦</em></h1>
-        <h2><span class="zh-only" id="heroTitleZh">{site.title.zh}</span><span class="en-only" id="heroTitleEn">{site.title.en}</span></h2>
-        <p><span class="zh-only" id="heroIntroZh">{site.intro.zh}</span><span class="en-only" id="heroIntroEn">{site.intro.en}</span></p>
-        <div class="hero-tags" aria-label="Core expertise" id="heroTags">
+        <h2><span class="zh-only">{site.title.zh}</span><span class="en-only">{site.title.en}</span></h2>
+        <p><span class="zh-only">{site.intro.zh}</span><span class="en-only">{site.intro.en}</span></p>
+        <div class="hero-tags" aria-label="Core expertise">
           {capabilities.map(c => <span><span class="zh-only">{c.title.zh}</span><span class="en-only">{c.title.en}</span></span>)}
         </div>
         <div class="hero-actions">
@@ -21,27 +22,47 @@ const fallback = JSON.stringify({ site, capabilities, experience });
           <a class="button secondary" href="/cases/"><span class="zh-only">瀏覽案例</span><span class="en-only">Browse Cases</span><b>→</b></a>
         </div>
       </div>
-      <div class="portrait-wrap"><div class="portrait-halo" aria-hidden="true"></div><img src="/images/shirley-chen-profile.jpg" alt="Shirley CHEN" /></div>
+      <div class="portrait-wrap">
+        <div class="portrait-halo" aria-hidden="true"></div>
+        <img src="/images/shirley-chen-profile.jpg" alt="Shirley CHEN" />
+      </div>
     </div>
   </section>
 
-  <section class="section expertise-section" id="expertise"><div class="shell"><div class="section-heading"><span>WHAT I DO</span><h2><span class="zh-only">我的專業</span><span class="en-only">Core Expertise</span></h2></div><div class="capability-grid" id="capabilityGrid">{capabilities.map((c, i) => <article class="capability-card"><div class="capability-number">0{i+1}</div><h3><span class="zh-only">{c.title.zh}</span><span class="en-only">{c.title.en}</span></h3><p><span class="zh-only">{c.text.zh}</span><span class="en-only">{c.text.en}</span></p></article>)}</div></div></section>
+  <section class="section expertise-section" id="expertise">
+    <div class="shell">
+      <div class="section-heading"><span>WHAT I DO</span><h2><span class="zh-only">我的專業</span><span class="en-only">Core Expertise</span></h2></div>
+      <div class="capability-grid">
+        {capabilities.map((c, i) => <article class="capability-card">
+          <div class="capability-number">0{i+1}</div>
+          <h3><span class="zh-only">{c.title.zh}</span><span class="en-only">{c.title.en}</span></h3>
+          <p><span class="zh-only">{c.text.zh}</span><span class="en-only">{c.text.en}</span></p>
+        </article>)}
+      </div>
+    </div>
+  </section>
 
-  <section class="section experience-highlight"><div class="shell"><div class="section-heading section-heading-light split-heading"><div><span>EXPERIENCE HIGHLIGHTS</span><h2><span class="zh-only">工作經歷概覽</span><span class="en-only">Experience Highlights</span></h2></div><a class="text-link text-link-light" href="/experience/"><span class="zh-only">查看完整經歷 →</span><span class="en-only">Full experience →</span></a></div><div class="timeline-snapshot" id="homeExperience">{experience.map(item => <article><div class="period">{item.period}</div><h3>{item.company}</h3><strong><span class="zh-only">{item.role.zh}</span><span class="en-only">{item.role.en}</span></strong><p><span class="zh-only">{item.summary.zh}</span><span class="en-only">{item.summary.en}</span></p></article>)}</div></div></section>
+  <section class="section experience-highlight">
+    <div class="shell">
+      <div class="section-heading section-heading-light split-heading">
+        <div><span>EXPERIENCE HIGHLIGHTS</span><h2><span class="zh-only">工作經歷概覽</span><span class="en-only">Experience Highlights</span></h2></div>
+        <a class="text-link text-link-light" href="/experience/"><span class="zh-only">查看完整經歷 →</span><span class="en-only">Full experience →</span></a>
+      </div>
+      <div class="timeline-snapshot">
+        {experience.map(item => <article>
+          <div class="period">{item.period}</div>
+          <h3>{item.company}</h3>
+          <strong><span class="zh-only">{item.role.zh}</span><span class="en-only">{item.role.en}</span></strong>
+          <p><span class="zh-only">{item.summary.zh}</span><span class="en-only">{item.summary.en}</span></p>
+        </article>)}
+      </div>
+    </div>
+  </section>
 
-  <section class="section cases-preview-section"><div class="shell"><div class="section-heading split-heading"><div><span>CASE STUDIES</span><h2><span class="zh-only">案例展示</span><span class="en-only">Case Studies</span></h2></div><a class="text-link" href="/cases/"><span class="zh-only">查看全部 →</span><span class="en-only">View all →</span></a></div><div id="homeCases"><div class="empty-feature"><div><span class="eyebrow">CASE STUDIES</span><strong><span class="zh-only">案例內容將逐步更新</span><span class="en-only">Case studies will be added progressively</span></strong><p><span class="zh-only">僅展示適合公開的媒體活動、企業活動，以及 ESG 與持份者參與案例。</span><span class="en-only">Only suitable public-facing media events, corporate events, and ESG & stakeholder engagement cases will be shown.</span></p></div><a class="button dark" href="/cases/"><span class="zh-only">進入案例展示</span><span class="en-only">Browse Cases</span></a></div></div></div></section>
-
-<script>
-import { loadPublishedCases, loadSiteContent } from '../scripts/publicContent';
-const esc=(v='')=>String(v).replace(/[&<>'"]/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#039;','"':'&quot;'}[ch]));
-const fallback = JSON.parse(document.getElementById('homeHero')?.dataset.fallback || '{}');
-loadSiteContent(fallback).then((c:any)=>{
-  const set=(id:string,v:string)=>{const el=document.getElementById(id);if(el&&v!=null)el.textContent=v};
-  set('heroKickerZh',c.site?.heroKicker?.zh); set('heroKickerEn',c.site?.heroKicker?.en); set('heroTitleZh',c.site?.title?.zh); set('heroTitleEn',c.site?.title?.en); set('heroIntroZh',c.site?.intro?.zh); set('heroIntroEn',c.site?.intro?.en);
-  const tags=document.getElementById('heroTags'); if(tags&&Array.isArray(c.capabilities)) tags.innerHTML=c.capabilities.map((x:any)=>`<span><span class="zh-only">${esc(x.title?.zh)}</span><span class="en-only">${esc(x.title?.en)}</span></span>`).join('');
-  const cg=document.getElementById('capabilityGrid'); if(cg&&Array.isArray(c.capabilities)) cg.innerHTML=c.capabilities.map((x:any,i:number)=>`<article class="capability-card"><div class="capability-number">0${i+1}</div><h3><span class="zh-only">${esc(x.title?.zh)}</span><span class="en-only">${esc(x.title?.en)}</span></h3><p><span class="zh-only">${esc(x.text?.zh)}</span><span class="en-only">${esc(x.text?.en)}</span></p></article>`).join('');
-  const ex=document.getElementById('homeExperience'); if(ex&&Array.isArray(c.experience)) ex.innerHTML=c.experience.map((x:any)=>`<article><div class="period">${esc(x.period)}</div><h3>${esc(x.company)}</h3><strong><span class="zh-only">${esc(x.role?.zh)}</span><span class="en-only">${esc(x.role?.en)}</span></strong><p><span class="zh-only">${esc(x.summary?.zh)}</span><span class="en-only">${esc(x.summary?.en)}</span></p></article>`).join('');
-});
-loadPublishedCases().then((items:any[])=>{const el=document.getElementById('homeCases');if(!el||!items.length)return;el.innerHTML=`<div class="case-grid">${items.slice(0,3).map(x=>`<article class="case-card"><div class="case-thumb ${x.cover_url?'':'placeholder'}">${x.cover_url?`<img src="${esc(x.cover_url)}" alt="">`:'<span>SC</span>'}</div><div class="case-body"><div class="case-meta"><span class="case-category"><span class="zh-only">${esc(x.category_zh)}</span><span class="en-only">${esc(x.category_en)}</span></span><span>${esc(x.date_label||'')}</span></div><h3><span class="zh-only">${esc(x.title_zh)}</span><span class="en-only">${esc(x.title_en)}</span></h3>${x.company?`<strong>${esc(x.company)}</strong>`:''}</div></article>`).join('')}</div>`});
-</script>
+  <section class="section cases-preview-section">
+    <div class="shell">
+      <div class="section-heading split-heading"><div><span>CASE STUDIES</span><h2><span class="zh-only">案例展示</span><span class="en-only">Case Studies</span></h2></div><a class="text-link" href="/cases/"><span class="zh-only">查看全部 →</span><span class="en-only">View all →</span></a></div>
+      {featured.length ? <div class="case-grid">{featured.map((item:any) => <article class="case-card"><div class:list={["case-thumb", !item.image && "placeholder"]}>{item.image ? <img src={item.image} alt="" /> : <span>SC</span>}</div><div class="case-body"><div class="case-meta"><span class="case-category"><span class="zh-only">{item.categoryZh}</span><span class="en-only">{item.categoryEn}</span></span><span>{item.date}</span></div><h3><span class="zh-only">{item.titleZh}</span><span class="en-only">{item.titleEn}</span></h3>{item.company && <strong>{item.company}</strong>}</div></article>)}</div> : <div class="empty-feature"><div><span class="eyebrow">CASE STUDIES</span><strong><span class="zh-only">案例內容將逐步更新</span><span class="en-only">Case studies will be added progressively</span></strong><p><span class="zh-only">僅展示適合公開的媒體活動、企業活動，以及 ESG 與持份者參與案例。</span><span class="en-only">Only suitable public-facing media events, corporate events, and ESG & stakeholder engagement cases will be shown.</span></p></div><a class="button dark" href="/cases/"><span class="zh-only">進入案例展示</span><span class="en-only">Browse Cases</span></a></div>}
+    </div>
+  </section>
 </BaseLayout>

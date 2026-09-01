@@ -1,15 +1,8 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { experience, site, capabilities, education, languages } from '../data/site';
-const fallback = JSON.stringify({site, capabilities, experience, education, languages});
+import { experience } from '../data/site';
 ---
 <BaseLayout titleZh="工作經歷" titleEn="Work Experience">
   <section class="page-hero"><div class="shell"><span class="eyebrow"><span class="zh-only">工作經歷</span><span class="en-only">WORK EXPERIENCE</span></span><h1><span class="zh-only">工作經歷</span><span class="en-only">Work Experience</span></h1><p><span class="zh-only">從財經公關、公眾及持份者傳訊，到金融機構企業傳訊的職業發展。</span><span class="en-only">A career path spanning financial PR, public and stakeholder communications, and in-house corporate communications in financial services.</span></p></div></section>
-  <section class="section" id="experienceApp" data-fallback={fallback}><div class="shell experience-list" id="experienceList">{experience.map((item,i)=><article class="experience-item"><div class="experience-index">0{i+1}</div><div class="experience-date">{item.period}</div><div class="experience-content"><h2>{item.company}</h2><h3><span class="zh-only">{item.role.zh}</span><span class="en-only">{item.role.en}</span></h3><p class="lead-small"><span class="zh-only">{item.summary.zh}</span><span class="en-only">{item.summary.en}</span></p><ul class="zh-only">{item.bullets.zh.map(b=><li>{b}</li>)}</ul><ul class="en-only">{item.bullets.en.map(b=><li>{b}</li>)}</ul></div></article>)}</div></section>
-<script>
-import { loadSiteContent } from '../scripts/publicContent';
-const esc=(v='')=>String(v).replace(/[&<>'"]/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#039;','"':'&quot;'}[ch]));
-const app=document.getElementById('experienceApp'); const fallback=JSON.parse(app?.dataset.fallback||'{}');
-loadSiteContent(fallback).then((c:any)=>{const el=document.getElementById('experienceList');if(!el||!Array.isArray(c.experience))return;el.innerHTML=c.experience.map((x:any,i:number)=>`<article class="experience-item"><div class="experience-index">0${i+1}</div><div class="experience-date">${esc(x.period)}</div><div class="experience-content"><h2>${esc(x.company)}</h2><h3><span class="zh-only">${esc(x.role?.zh)}</span><span class="en-only">${esc(x.role?.en)}</span></h3><p class="lead-small"><span class="zh-only">${esc(x.summary?.zh)}</span><span class="en-only">${esc(x.summary?.en)}</span></p><ul class="zh-only">${(x.bullets?.zh||[]).map((b:string)=>`<li>${esc(b)}</li>`).join('')}</ul><ul class="en-only">${(x.bullets?.en||[]).map((b:string)=>`<li>${esc(b)}</li>`).join('')}</ul></div></article>`).join('')});
-</script>
+  <section class="section"><div class="shell experience-list">{experience.map((item,i)=><article class="experience-item"><div class="experience-index">0{i+1}</div><div class="experience-date">{item.period}</div><div class="experience-content"><h2>{item.company}</h2><h3><span class="zh-only">{item.role.zh}</span><span class="en-only">{item.role.en}</span></h3><p class="lead-small"><span class="zh-only">{item.summary.zh}</span><span class="en-only">{item.summary.en}</span></p><ul class="zh-only">{item.bullets.zh.map(b=><li>{b}</li>)}</ul><ul class="en-only">{item.bullets.en.map(b=><li>{b}</li>)}</ul></div></article>)}</div></section>
 </BaseLayout>

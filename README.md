@@ -1,57 +1,49 @@
-# Shirley CHEN Professional Profile — V8
+# Shirley CHEN Professional Profile — V8-GH
 
-V8 將 V7.2 的 GitHub 匯出／Commit 流程改為真正的 Supabase 後台。
+V8-GH is the GitHub-native version of Shirley CHEN's bilingual professional website.
 
-## V8 使用體驗
+## What changed
 
-日後更新流程：
+This version removes Supabase and does not require a third-party CMS/database.
 
-`/cases/admin/` → 登入 → 編輯 → 上傳圖片 → 儲存／發佈 → 網站直接更新
+The public website still runs on GitHub Pages. The hidden admin page connects directly to the GitHub REST API using a **fine-grained personal access token that you paste into the admin page**. The token is never committed to the repository and is not hard-coded into the website.
 
-不再需要匯出 ZIP、改 `cases.json`、上傳 GitHub 或等待重新 build。
+Admin URL after deployment:
 
-## 技術架構
+`https://shirleysiqi.github.io/cases/admin/`
 
-- Astro 5 靜態前台，部署到 GitHub Pages
-- Supabase Auth：Admin Email / Password 登入
-- Supabase Database：案例及網站內容
-- Supabase Storage：封面、活動照片、媒體報導截圖
-- Row Level Security：公開訪客只能讀公開案例；登入帳戶可以管理資料
+## Daily workflow
 
-## 公開網站
+1. Open `/cases/admin/`.
+2. Paste your GitHub fine-grained token and connect.
+3. Add/edit/delete cases and upload images.
+4. Click **發佈到網站**.
+5. V8-GH creates one commit on `main` containing the updated `src/data/cases.json` and newly uploaded images.
+6. GitHub Actions automatically redeploys GitHub Pages.
 
-- `/` 首頁
-- `/experience/` 工作經歷
-- `/cases/` 案例展示
-- `/about/` 關於我
+No ZIP export, manual file upload, or manual GitHub commit is required for normal case updates.
 
-## Admin
+## Security model
 
-- `/cases/admin/`
-- 案例新增／修改／刪除
-- 草稿／公開
-- 封面圖片上傳
-- 多張 Gallery 圖片
-- Gallery 排序及刪除
-- 多則媒體報導
-- 媒體名稱、標題、日期、截圖、原文連結
-- 網站主要文字後台修改
+- Do **not** put a token in source code, GitHub repository files, screenshots, or public messages.
+- Use a fine-grained token restricted to the single repository `shirleysiqi/shirleysiqi.github.io`.
+- Grant only `Contents: Read and write` repository permission.
+- The admin page does not persist the token by default. If “只在目前分頁工作階段記住 Token” is checked, it uses `sessionStorage`, which is cleared when that browser tab/session ends.
+- This static admin is convenient but the admin URL itself is public. Security comes from the GitHub token, not from hiding the URL.
 
-## 搜尋引擎
+## Search indexing
 
-所有頁面保留：
+The site keeps the V7.2 privacy preference:
 
-`noindex, nofollow, noarchive, nosnippet, noimageindex`
+- `noindex`
+- `nofollow`
+- `noarchive`
+- `nosnippet`
+- `noimageindex`
+- `robots.txt` uses `Disallow: /`
 
-以及：
+This discourages normal search-engine indexing. It does not make a public GitHub Pages URL private.
 
-```txt
-User-agent: *
-Disallow: /
-```
+## First-time setup
 
-這降低一般搜尋引擎建立索引的機會，但不會把公開 GitHub Pages 網站變成私人網站。
-
-## 第一次安裝
-
-請直接看 `SETUP_GUIDE.md`。Supabase SQL 在 `supabase/SETUP.sql`。
+Read `SETUP_GUIDE.md`.
