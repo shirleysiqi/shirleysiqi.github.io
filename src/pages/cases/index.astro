@@ -1,12 +1,10 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import cases from '../../data/cases.json';
-const data = JSON.stringify(cases);
 ---
 <BaseLayout titleZh="案例展示" titleEn="Case Studies">
   <section class="page-hero"><div class="shell"><span class="eyebrow"><span class="zh-only">案例展示</span><span class="en-only">CASE STUDIES</span></span><h1><span class="zh-only">案例展示</span><span class="en-only">Case Studies</span></h1><p><span class="zh-only">以適合公開的活動與項目為主，按媒體活動、企業活動，以及 ESG 及持份者參與分類展示。</span><span class="en-only">Selected public-facing activities and projects, grouped into media events, corporate events, and ESG & stakeholder engagement.</span></p></div></section>
 
-  <section class="section cases-app" data-default={data}>
+  <section class="section cases-app">
     <div class="shell">
       <div class="case-toolbar"><div class="case-filters" id="caseFilters">
         <button class="filter-button active" data-filter="all"><span class="zh-only">全部</span><span class="en-only">All</span></button>
@@ -15,49 +13,19 @@ const data = JSON.stringify(cases);
         <button class="filter-button" data-filter="esg"><span class="zh-only">ESG 及持份者參與</span><span class="en-only">ESG & Stakeholder Engagement</span></button>
       </div></div>
       <div class="case-grid" id="caseGrid"></div>
-      <div class="empty-state" id="caseEmpty" hidden><h2><span class="zh-only">內容準備中</span><span class="en-only">Content coming soon</span></h2><p><span class="zh-only">案例會在確認適合公開後逐步加入。</span><span class="en-only">Cases will be added progressively once suitable for public display.</span></p></div>
+      <div class="empty-state" id="caseEmpty"><h2><span class="zh-only">內容準備中</span><span class="en-only">Content coming soon</span></h2><p><span class="zh-only">案例會在確認適合公開後逐步加入。</span><span class="en-only">Cases will be added progressively once suitable for public display.</span></p></div>
     </div>
   </section>
 
-  <dialog class="case-detail-dialog" id="caseDetailDialog">
-    <div class="case-detail" id="caseDetail"></div>
-  </dialog>
-
-<script is:inline>
-(() => {
- const app=document.querySelector('.cases-app'); if(!app)return;
- const defaults=JSON.parse(app.dataset.default||'[]');
- const grid=document.getElementById('caseGrid');
- const empty=document.getElementById('caseEmpty');
- const detailDialog=document.getElementById('caseDetailDialog');
- const detail=document.getElementById('caseDetail');
- let filter='all';
- const esc=(v='')=>String(v).replace(/[&<>'"]/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#039;','"':'&quot;'}[ch]));
- const mediaSrc=(obj)=>obj?.src||obj?.dataUrl||'';
- const render=()=>{
-   const list=defaults.filter(x=>x.published!==false && (filter==='all'||x.category===filter));
-   grid.innerHTML=list.map(x=>{
-     const cover=mediaSrc(x.cover)||x.image||'';
-     const count=(x.gallery?.length||0)+(x.coverage?.length||0);
-     return `<article class="case-card"><div class="case-thumb ${cover?'':'placeholder'}">${cover?`<img src="${esc(cover)}" alt="">`:'<span>SC</span>'}</div><div class="case-body"><div class="case-meta"><span class="case-category"><span class="zh-only">${esc(x.categoryZh)}</span><span class="en-only">${esc(x.categoryEn)}</span></span><span>${esc(x.date||'')}</span></div><h2><span class="zh-only">${esc(x.titleZh)}</span><span class="en-only">${esc(x.titleEn)}</span></h2>${x.company?`<strong>${esc(x.company)}</strong>`:''}<p><span class="zh-only">${esc(x.summaryZh||'')}</span><span class="en-only">${esc(x.summaryEn||'')}</span></p><div class="case-card-footer"><button class="text-button" data-open-case="${esc(x.id)}"><span class="zh-only">查看案例 →</span><span class="en-only">View case →</span></button>${count?`<span class="asset-count">${count}</span>`:''}</div></div></article>`;
-   }).join('');
-   empty.hidden=list.length>0;
- };
- const openCase=(x)=>{
-   const lang=document.documentElement.dataset.lang==='en'?'en':'zh';
-   const title=lang==='en'?x.titleEn:x.titleZh;
-   const summary=lang==='en'?x.summaryEn:x.summaryZh;
-   const cat=lang==='en'?x.categoryEn:x.categoryZh;
-   const gallery=(x.gallery||[]).filter(g=>mediaSrc(g));
-   const coverage=(x.coverage||[]).filter(c=>c.media||c.titleZh||c.titleEn||c.url||mediaSrc(c.screenshot));
-   detail.innerHTML=`<button class="case-detail-close" type="button" aria-label="Close">×</button><div class="case-detail-head"><div><span class="eyebrow">${esc(cat||'')}</span><h2>${esc(title||'')}</h2>${x.company?`<strong>${esc(x.company)}</strong>`:''}<div class="case-detail-date">${esc(x.date||'')}</div></div><p>${esc(summary||'')}</p></div>${gallery.length?`<section class="case-detail-section"><h3>${lang==='en'?'Event Gallery':'活動圖片'}</h3><div class="case-gallery">${gallery.map(g=>`<figure><img src="${esc(mediaSrc(g))}" alt="${esc(g.alt||title||'')}">${g.captionZh||g.captionEn?`<figcaption>${esc(lang==='en'?(g.captionEn||g.captionZh):(g.captionZh||g.captionEn))}</figcaption>`:''}</figure>`).join('')}</div></section>`:''}${coverage.length?`<section class="case-detail-section"><h3>${lang==='en'?'Media Coverage':'媒體報導'}</h3><div class="coverage-grid">${coverage.map(c=>{const ss=mediaSrc(c.screenshot);const ct=lang==='en'?(c.titleEn||c.titleZh):(c.titleZh||c.titleEn);return `<article class="coverage-card">${ss?`<a class="coverage-shot" ${c.url?`href="${esc(c.url)}" target="_blank" rel="noreferrer"`:''}><img src="${esc(ss)}" alt=""></a>`:''}<div class="coverage-body"><div class="coverage-meta"><strong>${esc(c.media||'')}</strong><span>${esc(c.date||'')}</span></div><h4>${esc(ct||'')}</h4>${c.url?`<a class="text-link" href="${esc(c.url)}" target="_blank" rel="noreferrer">${lang==='en'?'View original article →':'查看原文 →'}</a>`:''}</div></article>`}).join('')}</div></section>`:''}`;
-   detailDialog.showModal();
-   detail.querySelector('.case-detail-close')?.addEventListener('click',()=>detailDialog.close());
- };
- document.getElementById('caseFilters').addEventListener('click',e=>{const b=e.target.closest('[data-filter]');if(!b)return;filter=b.dataset.filter;document.querySelectorAll('.filter-button').forEach(x=>x.classList.toggle('active',x===b));render();});
- grid.addEventListener('click',e=>{const b=e.target.closest('[data-open-case]');if(!b)return;const x=defaults.find(i=>i.id===b.dataset.openCase);if(x)openCase(x);});
- detailDialog.addEventListener('click',e=>{if(e.target===detailDialog)detailDialog.close();});
- render();
-})();
+  <dialog class="case-detail-dialog" id="caseDetailDialog"><div class="case-detail" id="caseDetail"></div></dialog>
+<script>
+import { loadPublishedCases } from '../../scripts/publicContent';
+const grid=document.getElementById('caseGrid')!; const empty=document.getElementById('caseEmpty')!; const dialog=document.getElementById('caseDetailDialog') as HTMLDialogElement; const detail=document.getElementById('caseDetail')!; let items:any[]=[]; let filter='all';
+const esc=(v='')=>String(v).replace(/[&<>'"]/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#039;','"':'&quot;'}[ch]));
+const render=()=>{const list=items.filter(x=>filter==='all'||x.category===filter);grid.innerHTML=list.map(x=>`<article class="case-card"><div class="case-thumb ${x.cover_url?'':'placeholder'}">${x.cover_url?`<img src="${esc(x.cover_url)}" alt="">`:'<span>SC</span>'}</div><div class="case-body"><div class="case-meta"><span class="case-category"><span class="zh-only">${esc(x.category_zh)}</span><span class="en-only">${esc(x.category_en)}</span></span><span>${esc(x.date_label||'')}</span></div><h2><span class="zh-only">${esc(x.title_zh)}</span><span class="en-only">${esc(x.title_en)}</span></h2>${x.company?`<strong>${esc(x.company)}</strong>`:''}<p><span class="zh-only">${esc(x.summary_zh||'')}</span><span class="en-only">${esc(x.summary_en||'')}</span></p><div class="case-card-footer"><button class="text-button" data-open-case="${x.id}"><span class="zh-only">查看案例 →</span><span class="en-only">View case →</span></button></div></div></article>`).join('');empty.hidden=list.length>0;};
+const openCase=(x:any)=>{const lang=document.documentElement.dataset.lang==='en'?'en':'zh';const title=lang==='en'?x.title_en:x.title_zh;const summary=lang==='en'?x.summary_en:x.summary_zh;const cat=lang==='en'?x.category_en:x.category_zh;const gallery=Array.isArray(x.gallery)?x.gallery:[];const coverage=Array.isArray(x.coverage)?x.coverage:[];detail.innerHTML=`<button class="case-detail-close" type="button" aria-label="Close">×</button><div class="case-detail-head"><div><span class="eyebrow">${esc(cat||'')}</span><h2>${esc(title||'')}</h2>${x.company?`<strong>${esc(x.company)}</strong>`:''}<div class="case-detail-date">${esc(x.date_label||'')}</div></div><p>${esc(summary||'')}</p></div>${gallery.length?`<section class="case-detail-section"><h3>${lang==='en'?'Event Gallery':'活動圖片'}</h3><div class="case-gallery">${gallery.map((g:any)=>`<figure><img src="${esc(g.url||'')}" alt="${esc(lang==='en'?(g.caption_en||title):(g.caption_zh||title))}">${(g.caption_zh||g.caption_en)?`<figcaption>${esc(lang==='en'?(g.caption_en||g.caption_zh):(g.caption_zh||g.caption_en))}</figcaption>`:''}</figure>`).join('')}</div></section>`:''}${coverage.length?`<section class="case-detail-section"><h3>${lang==='en'?'Media Coverage':'媒體報導'}</h3><div class="coverage-grid">${coverage.map((c:any)=>`<article class="coverage-card">${c.screenshot_url?`<a class="coverage-shot" ${c.url?`href="${esc(c.url)}" target="_blank" rel="noreferrer"`:''}><img src="${esc(c.screenshot_url)}" alt=""></a>`:''}<div class="coverage-body"><div class="coverage-meta"><strong>${esc(c.media||'')}</strong><span>${esc(c.date||'')}</span></div><h4>${esc(lang==='en'?(c.title_en||c.title_zh):(c.title_zh||c.title_en))}</h4>${c.url?`<a class="text-link" href="${esc(c.url)}" target="_blank" rel="noreferrer">${lang==='en'?'View original article →':'查看原文 →'}</a>`:''}</div></article>`).join('')}</div><p class="coverage-note">${lang==='en'?'Screenshots are shown as portfolio previews only. Copyright remains with the respective publishers.':'報導截圖僅作作品集預覽展示，內容版權歸相關媒體及出版機構所有。'}</p></section>`:''}`;dialog.showModal();detail.querySelector('.case-detail-close')?.addEventListener('click',()=>dialog.close());};
+document.getElementById('caseFilters')?.addEventListener('click',e=>{const b=(e.target as HTMLElement).closest('[data-filter]') as HTMLElement|null;if(!b)return;filter=b.dataset.filter||'all';document.querySelectorAll('.filter-button').forEach(x=>x.classList.toggle('active',x===b));render();});
+grid.addEventListener('click',e=>{const b=(e.target as HTMLElement).closest('[data-open-case]') as HTMLElement|null;if(!b)return;const x=items.find(i=>i.id===b.dataset.openCase);if(x)openCase(x);});dialog.addEventListener('click',e=>{if(e.target===dialog)dialog.close()});
+loadPublishedCases().then(data=>{items=data;render()});
 </script>
 </BaseLayout>

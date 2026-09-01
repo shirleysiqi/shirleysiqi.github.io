@@ -1,6 +1,6 @@
 {
-  "name": "shirleysiqi-professional-profile-v7.2",
-  "version": "1.0.0",
+  "name": "shirleysiqi-professional-profile-v8",
+  "version": "8.0.0",
   "private": true,
   "type": "module",
   "scripts": {
@@ -9,7 +9,7 @@
     "preview": "astro preview"
   },
   "dependencies": {
-    "astro": "^5.13.5",
-    "jszip": "^3.10.1"
+    "@supabase/supabase-js": "^2.57.4",
+    "astro": "^5.13.5"
   }
 }
