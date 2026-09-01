@@ -1,5 +1,5 @@
 {
-  "name": "shirleysiqi-professional-profile-v7.1",
+  "name": "shirleysiqi-professional-profile-v7.2",
   "version": "1.0.0",
   "private": true,
   "type": "module",
@@ -9,6 +9,7 @@
     "preview": "astro preview"
   },
   "dependencies": {
-    "astro": "^5.13.5"
+    "astro": "^5.13.5",
+    "jszip": "^3.10.1"
   }
 }

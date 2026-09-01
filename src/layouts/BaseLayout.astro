@@ -12,6 +12,9 @@ const path = Astro.url.pathname;
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="theme-color" content="#061b31" />
   <meta name="description" content={site.intro.zh} />
+  <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex" />
+  <meta name="googlebot" content="noindex, nofollow, noarchive, nosnippet, noimageindex" />
+  <meta name="bingbot" content="noindex, nofollow, noarchive, nosnippet, noimageindex" />
   <title>{titleZh ? `${titleZh} | Shirley CHEN` : 'Shirley CHEN 陳思琦 | 企業傳訊 · 媒體關係 · 財經公關'}</title>
   <script is:inline>
     (() => {

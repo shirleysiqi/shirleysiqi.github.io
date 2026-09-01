@@ -4,36 +4,159 @@ import cases from '../../data/cases.json';
 import { ADMIN_PASSWORD_SHA256 } from '../../data/admin';
 const data = JSON.stringify(cases);
 ---
-<!doctype html><html lang="zh-Hant-HK"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><title>Case Admin | Shirley CHEN</title></head><body class="admin-body">
-<div class="admin-login" id="loginPanel"><div class="admin-login-card"><div class="admin-lock">SC</div><h1>案例管理</h1><p>此頁不會出現在公開網站導航。</p><label>管理員密碼<input id="adminPassword" type="password" autocomplete="current-password"></label><button class="button primary" id="adminLogin">登入</button><p class="admin-error" id="adminError" hidden>密碼不正確。</p><a href="/cases/">← 返回案例展示</a></div></div>
-<div class="admin-shell" id="adminApp" hidden data-default={data} data-hash={ADMIN_PASSWORD_SHA256}>
-<aside class="admin-sidebar"><a class="admin-brand" href="/">Shirley CHEN</a><strong>案例管理</strong><button data-admin-filter="all" class="active">全部案例</button><button data-admin-filter="media">媒體活動</button><button data-admin-filter="corporate">企業活動</button><button data-admin-filter="esg">ESG 及持份者參與</button><div class="admin-spacer"></div><a href="/cases/">查看公開頁面</a><button id="logout">登出</button></aside>
-<main class="admin-main"><div class="admin-top"><div><span>CASE MANAGEMENT</span><h1>案例管理</h1></div><div><button class="button ghost" id="exportCases">匯出 cases.json</button><button class="button primary" id="newCase">＋ 新增案例</button></div></div><div class="admin-notice">修改會先儲存在這部瀏覽器。確認後按「匯出 cases.json」，再用該檔案替換網站的 <code>src/data/cases.json</code> 即可正式發佈。</div><div class="admin-table" id="adminTable"></div></main>
-</div>
-<dialog class="edit-dialog" id="caseDialog"><form id="caseForm"><div class="dialog-header"><div><span>CASE EDITOR</span><h2 id="dialogTitle">新增案例</h2></div><button type="button" class="close-dialog" id="closeDialog">×</button></div><input type="hidden" id="caseId"><div class="form-grid"><label>分類<select id="category"><option value="media">媒體活動 / Media Events</option><option value="corporate">企業活動 / Corporate Events</option><option value="esg">ESG 及持份者參與 / ESG & Stakeholder Engagement</option></select></label><label>日期<input id="date" placeholder="2026.08"></label><label class="span-2">中文標題<input id="titleZh" required></label><label class="span-2">English title<input id="titleEn" required></label><label class="span-2">公司／機構<input id="company"></label><label class="span-2">中文簡介<textarea id="summaryZh" rows="4"></textarea></label><label class="span-2">English summary<textarea id="summaryEn" rows="4"></textarea></label><label class="span-2">封面圖片路徑<input id="image" placeholder="/images/cases/example.jpg"></label><label class="span-2">公開連結<input id="url" type="url" placeholder="https://..."></label><label class="check-label"><input id="published" type="checkbox" checked> 對外公開</label></div><div class="dialog-footer"><button type="button" class="button ghost" id="cancelEdit">取消</button><button class="button primary" type="submit">儲存</button></div></form></dialog>
-<script is:inline>
-(async()=>{
- const hashText=async t=>Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(t)))).map(b=>b.toString(16).padStart(2,'0')).join('');
- const login=document.getElementById('loginPanel'),app=document.getElementById('adminApp'),error=document.getElementById('adminError');
- const unlock=()=>{login.hidden=true;app.hidden=false;sessionStorage.setItem('shirley-admin','1');start();};
- if(sessionStorage.getItem('shirley-admin')==='1') unlock();
- document.getElementById('adminLogin').addEventListener('click',async()=>{const v=document.getElementById('adminPassword').value; if(await hashText(v)===app.dataset.hash)unlock();else error.hidden=false;});
- document.getElementById('adminPassword').addEventListener('keydown',e=>{if(e.key==='Enter')document.getElementById('adminLogin').click();});
- function start(){
-   if(app.dataset.started)return;app.dataset.started='1';
-   const STORAGE='shirley-cases-v7'; const defaults=JSON.parse(app.dataset.default||'[]'); let items;try{items=JSON.parse(localStorage.getItem(STORAGE))||defaults}catch{items=defaults}; let filter='all';
-   const table=document.getElementById('adminTable'),dialog=document.getElementById('caseDialog'),form=document.getElementById('caseForm');
-   const cat={media:['媒體活動','Media Events'],corporate:['企業活動','Corporate Events'],esg:['ESG 及持份者參與','ESG & Stakeholder Engagement']};
-   const esc=(v='')=>String(v).replace(/[&<>'"]/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#039;','"':'&quot;'}[ch]));
-   const save=()=>{localStorage.setItem(STORAGE,JSON.stringify(items));render();};
-   const render=()=>{const list=items.filter(x=>filter==='all'||x.category===filter); table.innerHTML=`<div class="admin-row admin-head"><span>案例</span><span>分類</span><span>公司</span><span>日期</span><span>狀態</span><span>操作</span></div>`+list.map(x=>`<div class="admin-row" data-id="${esc(x.id)}"><span><strong>${esc(x.titleZh)}</strong><small>${esc(x.titleEn)}</small></span><span>${esc(cat[x.category]?.[0]||'')}</span><span>${esc(x.company||'—')}</span><span>${esc(x.date||'—')}</span><span><i class="status ${x.published!==false?'live':''}">${x.published!==false?'已公開':'草稿'}</i></span><span class="row-actions"><button data-action="edit">編輯</button><button data-action="delete">刪除</button></span></div>`).join('');};
-   const open=(x={})=>{document.getElementById('dialogTitle').textContent=x.id?'修改案例':'新增案例';document.getElementById('caseId').value=x.id||'';document.getElementById('category').value=x.category||'media';document.getElementById('date').value=x.date||'';document.getElementById('titleZh').value=x.titleZh||'';document.getElementById('titleEn').value=x.titleEn||'';document.getElementById('company').value=x.company||'';document.getElementById('summaryZh').value=x.summaryZh||'';document.getElementById('summaryEn').value=x.summaryEn||'';document.getElementById('image').value=x.image||'';document.getElementById('url').value=x.url||'';document.getElementById('published').checked=x.published!==false;dialog.showModal();};
-   document.querySelectorAll('[data-admin-filter]').forEach(b=>b.addEventListener('click',()=>{filter=b.dataset.adminFilter;document.querySelectorAll('[data-admin-filter]').forEach(x=>x.classList.toggle('active',x===b));render();}));
-   document.getElementById('newCase').addEventListener('click',()=>open()); document.getElementById('closeDialog').onclick=()=>dialog.close();document.getElementById('cancelEdit').onclick=()=>dialog.close();
-   table.addEventListener('click',e=>{const b=e.target.closest('[data-action]');if(!b)return;const id=b.closest('[data-id]').dataset.id;const idx=items.findIndex(x=>x.id===id);if(b.dataset.action==='edit')open(items[idx]);if(b.dataset.action==='delete'&&confirm('確定刪除此案例？')){items.splice(idx,1);save();}});
-   form.addEventListener('submit',e=>{e.preventDefault();const id=document.getElementById('caseId').value||('case-'+Date.now());const category=document.getElementById('category').value;const entry={id,category,categoryZh:cat[category][0],categoryEn:cat[category][1],date:document.getElementById('date').value.trim(),titleZh:document.getElementById('titleZh').value.trim(),titleEn:document.getElementById('titleEn').value.trim(),company:document.getElementById('company').value.trim(),summaryZh:document.getElementById('summaryZh').value.trim(),summaryEn:document.getElementById('summaryEn').value.trim(),image:document.getElementById('image').value.trim(),url:document.getElementById('url').value.trim(),published:document.getElementById('published').checked};const i=items.findIndex(x=>x.id===id);if(i>=0)items[i]=entry;else items.unshift(entry);save();dialog.close();});
-   document.getElementById('exportCases').addEventListener('click',()=>{const blob=new Blob([JSON.stringify(items,null,2)],{type:'application/json'});const u=URL.createObjectURL(blob),a=document.createElement('a');a.href=u;a.download='cases.json';a.click();URL.revokeObjectURL(u);});
-   document.getElementById('logout').addEventListener('click',()=>{sessionStorage.removeItem('shirley-admin');location.reload();}); render();
+<!doctype html>
+<html lang="zh-Hant-HK">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex" />
+  <meta name="googlebot" content="noindex, nofollow, noarchive, nosnippet, noimageindex" />
+  <title>Case Admin | Shirley CHEN</title>
+</head>
+<body class="admin-body">
+  <div class="admin-login" id="loginPanel">
+    <div class="admin-login-card">
+      <div class="admin-lock">SC</div><h1>案例管理</h1>
+      <p>此頁不會出現在公開網站導航。請輸入管理員密碼。</p>
+      <label>管理員密碼<input id="adminPassword" type="password" autocomplete="current-password" /></label>
+      <button class="button primary" id="adminLogin">登入</button>
+      <p class="admin-error" id="adminError" hidden>密碼不正確。</p>
+      <a href="/cases/">← 返回案例展示</a>
+    </div>
+  </div>
+
+  <div class="admin-shell" id="adminApp" hidden data-default={data} data-hash={ADMIN_PASSWORD_SHA256}>
+    <aside class="admin-sidebar">
+      <a class="admin-brand" href="/">Shirley CHEN</a><strong>案例管理</strong>
+      <button data-admin-filter="all" class="active">全部案例</button>
+      <button data-admin-filter="media">媒體活動</button>
+      <button data-admin-filter="corporate">企業活動</button>
+      <button data-admin-filter="esg">ESG 及持份者參與</button>
+      <div class="admin-spacer"></div>
+      <a href="/cases/">查看公開頁面</a><button id="logout">登出</button>
+    </aside>
+
+    <main class="admin-main">
+      <div class="admin-top">
+        <div><span>CASE MANAGEMENT</span><h1>案例管理</h1></div>
+        <div class="admin-top-actions">
+          <label class="button ghost admin-file-button">匯入 cases.json<input id="importCases" type="file" accept="application/json,.json" hidden /></label>
+          <button class="button ghost" id="exportCases">匯出更新包 ZIP</button>
+          <button class="button primary" id="newCase">＋ 新增案例</button>
+        </div>
+      </div>
+      <div class="admin-notice"><strong>V7.2：</strong>可直接從電腦上傳封面、活動圖片及媒體報導截圖。草稿會儲存在這部瀏覽器的 IndexedDB。完成後按「匯出更新包 ZIP」，解壓後把其中的 <code>src/data/cases.json</code> 與 <code>public/images/cases/</code> 上傳到 GitHub。</div>
+      <div class="admin-table" id="adminTable"></div>
+    </main>
+  </div>
+
+  <dialog class="edit-dialog edit-dialog-wide" id="caseDialog">
+    <form id="caseForm">
+      <div class="dialog-header"><div><span>CASE EDITOR</span><h2 id="dialogTitle">新增案例</h2></div><button type="button" class="close-dialog" id="closeDialog">×</button></div>
+      <input type="hidden" id="caseId" />
+      <div class="editor-scroll">
+        <section class="editor-section"><h3>基本資料</h3><div class="form-grid">
+          <label>分類<select id="category"><option value="media">媒體活動 / Media Events</option><option value="corporate">企業活動 / Corporate Events</option><option value="esg">ESG 及持份者參與 / ESG & Stakeholder Engagement</option></select></label>
+          <label>日期<input id="date" placeholder="2026.08" /></label>
+          <label class="span-2">中文標題<input id="titleZh" required /></label>
+          <label class="span-2">English title<input id="titleEn" required /></label>
+          <label class="span-2">公司／機構<input id="company" /></label>
+          <label class="span-2">中文簡介<textarea id="summaryZh" rows="4"></textarea></label>
+          <label class="span-2">English summary<textarea id="summaryEn" rows="4"></textarea></label>
+          <label class="check-label"><input id="published" type="checkbox" checked /> 對外公開</label>
+        </div></section>
+
+        <section class="editor-section"><div class="editor-section-head"><div><h3>封面圖片</h3><p>建議橫向圖片；系統會在瀏覽器內壓縮後保存。</p></div><label class="button ghost admin-file-button">選擇封面<input id="coverInput" type="file" accept="image/jpeg,image/png,image/webp" hidden /></label></div><div class="single-image-preview" id="coverPreview"><span>尚未選擇封面圖片</span></div></section>
+
+        <section class="editor-section"><div class="editor-section-head"><div><h3>活動圖片</h3><p>可一次選擇多張 JPG、PNG 或 WebP；可刪除及調整次序。</p></div><label class="button ghost admin-file-button">＋ 加入活動圖片<input id="galleryInput" type="file" accept="image/jpeg,image/png,image/webp" multiple hidden /></label></div><div class="asset-editor-grid" id="galleryEditor"></div></section>
+
+        <section class="editor-section"><div class="editor-section-head"><div><h3>媒體報導</h3><p>每則報導可收錄媒體名稱、標題、日期、報導截圖及公開原文連結。</p></div><button type="button" class="button ghost" id="addCoverage">＋ 新增媒體報導</button></div><div class="coverage-editor-list" id="coverageEditor"></div></section>
+      </div>
+      <div class="dialog-footer"><button type="button" class="button ghost" id="cancelEdit">取消</button><button class="button primary" type="submit">儲存案例</button></div>
+    </form>
+  </dialog>
+
+<script>
+import JSZip from 'jszip';
+
+const hashText=async t=>Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(t)))).map(b=>b.toString(16).padStart(2,'0')).join('');
+const login=document.getElementById('loginPanel');
+const app=document.getElementById('adminApp');
+const error=document.getElementById('adminError');
+const unlock=()=>{login.hidden=true;app.hidden=false;sessionStorage.setItem('shirley-admin','1');start();};
+if(sessionStorage.getItem('shirley-admin')==='1') unlock();
+document.getElementById('adminLogin').addEventListener('click',async()=>{const v=document.getElementById('adminPassword').value;if(await hashText(v)===app.dataset.hash)unlock();else error.hidden=false;});
+document.getElementById('adminPassword').addEventListener('keydown',e=>{if(e.key==='Enter')document.getElementById('adminLogin').click();});
+
+function start(){
+ if(app.dataset.started)return;app.dataset.started='1';
+ const defaults=JSON.parse(app.dataset.default||'[]');
+ const DB_NAME='shirley-case-admin-v72',STORE='drafts',KEY='cases';
+ let items=[],filter='all',editing={cover:null,gallery:[],coverage:[]};
+ const table=document.getElementById('adminTable'),dialog=document.getElementById('caseDialog'),form=document.getElementById('caseForm');
+ const cat={media:['媒體活動','Media Events'],corporate:['企業活動','Corporate Events'],esg:['ESG 及持份者參與','ESG & Stakeholder Engagement']};
+ const esc=(v='')=>String(v).replace(/[&<>'"]/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#039;','"':'&quot;'}[ch]));
+ const uid=(p='asset')=>`${p}-${Date.now()}-${Math.random().toString(36).slice(2,8)}`;
+ const mediaSrc=o=>o?.src||o?.dataUrl||'';
+ const clone=o=>JSON.parse(JSON.stringify(o));
+
+ const dbOpen=()=>new Promise((resolve,reject)=>{const req=indexedDB.open(DB_NAME,1);req.onupgradeneeded=()=>{if(!req.result.objectStoreNames.contains(STORE))req.result.createObjectStore(STORE)};req.onsuccess=()=>resolve(req.result);req.onerror=()=>reject(req.error)});
+ const dbGet=async()=>{const db=await dbOpen();return await new Promise((resolve,reject)=>{const tx=db.transaction(STORE,'readonly');const r=tx.objectStore(STORE).get(KEY);r.onsuccess=()=>resolve(r.result);r.onerror=()=>reject(r.error)})};
+ const dbSet=async value=>{const db=await dbOpen();return await new Promise((resolve,reject)=>{const tx=db.transaction(STORE,'readwrite');tx.objectStore(STORE).put(value,KEY);tx.oncomplete=()=>resolve();tx.onerror=()=>reject(tx.error)})};
+
+ async function compressImage(file,max=1800,quality=.84){
+   const raw=await file.arrayBuffer();
+   const blob=new Blob([raw],{type:file.type});
+   const bitmap=await createImageBitmap(blob);
+   const scale=Math.min(1,max/Math.max(bitmap.width,bitmap.height));
+   const canvas=document.createElement('canvas');canvas.width=Math.round(bitmap.width*scale);canvas.height=Math.round(bitmap.height*scale);
+   canvas.getContext('2d').drawImage(bitmap,0,0,canvas.width,canvas.height);bitmap.close();
+   const out=await new Promise(r=>canvas.toBlob(r,'image/jpeg',quality));
+   return await new Promise((resolve,reject)=>{const fr=new FileReader();fr.onload=()=>resolve({name:(file.name.replace(/\.[^.]+$/,'')||'image')+'.jpg',dataUrl:fr.result,type:'image/jpeg'});fr.onerror=reject;fr.readAsDataURL(out)});
  }
-})();
-</script></body></html>
+
+ const save=async()=>{await dbSet(items);render();};
+ const render=()=>{const list=items.filter(x=>filter==='all'||x.category===filter);table.innerHTML=`<div class="admin-row admin-head"><span>案例</span><span>分類</span><span>公司</span><span>日期</span><span>狀態</span><span>操作</span></div>`+list.map(x=>`<div class="admin-row" data-id="${esc(x.id)}"><span><strong>${esc(x.titleZh)}</strong><small>${esc(x.titleEn)}</small></span><span>${esc(cat[x.category]?.[0]||'')}</span><span>${esc(x.company||'—')}</span><span>${esc(x.date||'—')}</span><span><i class="status ${x.published!==false?'live':''}">${x.published!==false?'已公開':'草稿'}</i></span><span class="row-actions"><button data-action="edit">編輯</button><button data-action="delete">刪除</button></span></div>`).join('');};
+
+ const renderCover=()=>{const el=document.getElementById('coverPreview'),src=mediaSrc(editing.cover);el.innerHTML=src?`<img src="${src}" alt=""><div class="asset-preview-actions"><button type="button" data-remove-cover>移除</button></div>`:'<span>尚未選擇封面圖片</span>';};
+ const renderGallery=()=>{const el=document.getElementById('galleryEditor');el.innerHTML=editing.gallery.length?editing.gallery.map((g,i)=>`<div class="asset-editor-card" data-gallery-index="${i}"><img src="${mediaSrc(g)}" alt=""><div class="asset-editor-actions"><button type="button" data-move="up" ${i===0?'disabled':''}>↑</button><button type="button" data-move="down" ${i===editing.gallery.length-1?'disabled':''}>↓</button><button type="button" data-remove-gallery>刪除</button></div></div>`).join(''):'<div class="asset-empty">尚未加入活動圖片</div>';};
+ const renderCoverage=()=>{const el=document.getElementById('coverageEditor');el.innerHTML=editing.coverage.length?editing.coverage.map((c,i)=>`<article class="coverage-editor-card" data-coverage-index="${i}"><div class="coverage-editor-head"><strong>媒體報導 ${String(i+1).padStart(2,'0')}</strong><button type="button" data-remove-coverage>刪除</button></div><div class="form-grid compact-grid"><label>媒體名稱<input data-c-field="media" value="${esc(c.media||'')}"></label><label>日期<input data-c-field="date" value="${esc(c.date||'')}"></label><label class="span-2">中文報導標題<input data-c-field="titleZh" value="${esc(c.titleZh||'')}"></label><label class="span-2">English headline<input data-c-field="titleEn" value="${esc(c.titleEn||'')}"></label><label class="span-2">公開原文連結<input type="url" data-c-field="url" value="${esc(c.url||'')}" placeholder="https://..."></label></div><div class="coverage-upload-row"><div class="coverage-admin-shot">${mediaSrc(c.screenshot)?`<img src="${mediaSrc(c.screenshot)}" alt="">`:'<span>尚未上傳報導截圖</span>'}</div><label class="button ghost admin-file-button">${mediaSrc(c.screenshot)?'更換截圖':'上傳截圖'}<input data-coverage-shot type="file" accept="image/jpeg,image/png,image/webp" hidden></label>${mediaSrc(c.screenshot)?'<button type="button" class="button ghost" data-remove-shot>移除截圖</button>':''}</div></article>`).join(''):'<div class="asset-empty">尚未加入媒體報導</div>';};
+ const renderAssets=()=>{renderCover();renderGallery();renderCoverage();};
+
+ const open=x=>{const v=x?clone(x):{};document.getElementById('dialogTitle').textContent=v.id?'修改案例':'新增案例';document.getElementById('caseId').value=v.id||'';document.getElementById('category').value=v.category||'media';document.getElementById('date').value=v.date||'';document.getElementById('titleZh').value=v.titleZh||'';document.getElementById('titleEn').value=v.titleEn||'';document.getElementById('company').value=v.company||'';document.getElementById('summaryZh').value=v.summaryZh||'';document.getElementById('summaryEn').value=v.summaryEn||'';document.getElementById('published').checked=v.published!==false;editing={cover:v.cover||(v.image?{src:v.image,name:'cover'}:null),gallery:v.gallery||[],coverage:v.coverage||[]};renderAssets();dialog.showModal();};
+
+ document.querySelectorAll('[data-admin-filter]').forEach(b=>b.addEventListener('click',()=>{filter=b.dataset.adminFilter;document.querySelectorAll('[data-admin-filter]').forEach(x=>x.classList.toggle('active',x===b));render();}));
+ document.getElementById('newCase').addEventListener('click',()=>open());
+ document.getElementById('closeDialog').onclick=()=>dialog.close();document.getElementById('cancelEdit').onclick=()=>dialog.close();
+ table.addEventListener('click',async e=>{const b=e.target.closest('[data-action]');if(!b)return;const id=b.closest('[data-id]').dataset.id;const idx=items.findIndex(x=>x.id===id);if(b.dataset.action==='edit')open(items[idx]);if(b.dataset.action==='delete'&&confirm('確定刪除此案例？')){items.splice(idx,1);await save();}});
+
+ document.getElementById('coverInput').addEventListener('change',async e=>{const f=e.target.files?.[0];if(!f)return;editing.cover=await compressImage(f,1800,.86);renderCover();e.target.value='';});
+ document.getElementById('coverPreview').addEventListener('click',e=>{if(e.target.closest('[data-remove-cover]')){editing.cover=null;renderCover();}});
+ document.getElementById('galleryInput').addEventListener('change',async e=>{for(const f of [...(e.target.files||[])])editing.gallery.push(await compressImage(f,1800,.84));renderGallery();e.target.value='';});
+ document.getElementById('galleryEditor').addEventListener('click',e=>{const card=e.target.closest('[data-gallery-index]');if(!card)return;const i=Number(card.dataset.galleryIndex);if(e.target.closest('[data-remove-gallery]'))editing.gallery.splice(i,1);const move=e.target.closest('[data-move]')?.dataset.move;if(move==='up'&&i>0)[editing.gallery[i-1],editing.gallery[i]]=[editing.gallery[i],editing.gallery[i-1]];if(move==='down'&&i<editing.gallery.length-1)[editing.gallery[i+1],editing.gallery[i]]=[editing.gallery[i],editing.gallery[i+1]];renderGallery();});
+ document.getElementById('addCoverage').addEventListener('click',()=>{editing.coverage.push({id:uid('coverage'),media:'',date:'',titleZh:'',titleEn:'',url:'',screenshot:null});renderCoverage();});
+ document.getElementById('coverageEditor').addEventListener('input',e=>{const card=e.target.closest('[data-coverage-index]'),field=e.target.dataset.cField;if(!card||!field)return;editing.coverage[Number(card.dataset.coverageIndex)][field]=e.target.value;});
+ document.getElementById('coverageEditor').addEventListener('change',async e=>{if(!e.target.matches('[data-coverage-shot]'))return;const card=e.target.closest('[data-coverage-index]'),f=e.target.files?.[0];if(!f)return;editing.coverage[Number(card.dataset.coverageIndex)].screenshot=await compressImage(f,1900,.86);renderCoverage();});
+ document.getElementById('coverageEditor').addEventListener('click',e=>{const card=e.target.closest('[data-coverage-index]');if(!card)return;const i=Number(card.dataset.coverageIndex);if(e.target.closest('[data-remove-coverage]')){editing.coverage.splice(i,1);renderCoverage();}if(e.target.closest('[data-remove-shot]')){editing.coverage[i].screenshot=null;renderCoverage();}});
+
+ form.addEventListener('submit',async e=>{e.preventDefault();const id=document.getElementById('caseId').value||uid('case');const category=document.getElementById('category').value;const entry={id,category,categoryZh:cat[category][0],categoryEn:cat[category][1],date:document.getElementById('date').value.trim(),titleZh:document.getElementById('titleZh').value.trim(),titleEn:document.getElementById('titleEn').value.trim(),company:document.getElementById('company').value.trim(),summaryZh:document.getElementById('summaryZh').value.trim(),summaryEn:document.getElementById('summaryEn').value.trim(),cover:editing.cover,gallery:editing.gallery,coverage:editing.coverage,published:document.getElementById('published').checked};const i=items.findIndex(x=>x.id===id);if(i>=0)items[i]=entry;else items.unshift(entry);await save();dialog.close();});
+
+ const dataUrlToBytes=dataUrl=>{const [meta,b64]=dataUrl.split(',');const mime=(meta.match(/data:([^;]+)/)||[])[1]||'image/jpeg';const bin=atob(b64),arr=new Uint8Array(bin.length);for(let i=0;i<bin.length;i++)arr[i]=bin.charCodeAt(i);return {bytes:arr,mime};};
+ const safeName=(name,fallback)=>((name||fallback).replace(/[^a-zA-Z0-9._-]+/g,'-').replace(/^-+|-+$/g,'')||fallback).replace(/\.(png|webp|jpeg)$/i,'.jpg');
+ const packageAsset=(asset,path,zip)=>{if(!asset)return null;const src=mediaSrc(asset);if(!src)return null;if(!src.startsWith('data:'))return {src,name:asset.name||''};const file=safeName(asset.name,'image.jpg');const full=`${path}/${file}`;zip.file(full,dataUrlToBytes(src).bytes);return {src:`/${full.replace(/^public\//,'')}`,name:file};};
+
+ document.getElementById('exportCases').addEventListener('click',async()=>{
+   const zip=new JSZip();const out=[];
+   for(const x of items){const base=`public/images/cases/${x.id}`;const y={...x};y.cover=packageAsset(x.cover,base,zip);y.gallery=(x.gallery||[]).map((g,i)=>packageAsset({...g,name:`gallery-${String(i+1).padStart(2,'0')}.jpg`},base,zip)).filter(Boolean);y.coverage=(x.coverage||[]).map((c,i)=>({...c,screenshot:packageAsset(c.screenshot?{...c.screenshot,name:`coverage-${String(i+1).padStart(2,'0')}.jpg`}:null,base,zip)}));out.push(y);}
+   zip.file('src/data/cases.json',JSON.stringify(out,null,2));
+   zip.file('UPLOAD_INSTRUCTIONS.txt','V7.2 publication update bundle\n\n1. Extract this ZIP.\n2. Upload/replace src/data/cases.json in your GitHub repository.\n3. Upload/merge public/images/cases/ into your repository.\n4. Commit to main. GitHub Actions will redeploy the site.\n');
+   const blob=await zip.generateAsync({type:'blob',compression:'DEFLATE',compressionOptions:{level:6}});const u=URL.createObjectURL(blob),a=document.createElement('a');a.href=u;a.download='shirley-cases-update.zip';a.click();URL.revokeObjectURL(u);
+ });
+
+ document.getElementById('importCases').addEventListener('change',async e=>{const f=e.target.files?.[0];if(!f)return;try{const parsed=JSON.parse(await f.text());if(!Array.isArray(parsed))throw new Error();if(confirm('匯入會取代目前瀏覽器中的案例草稿，是否繼續？')){items=parsed;await save();}}catch{alert('無法讀取這個 cases.json。');}e.target.value='';});
+ document.getElementById('logout').addEventListener('click',()=>{sessionStorage.removeItem('shirley-admin');location.reload();});
+
+ dbGet().then(saved=>{items=Array.isArray(saved)?saved:defaults;render();}).catch(()=>{items=defaults;render();});
+}
+</script>
+</body></html>
