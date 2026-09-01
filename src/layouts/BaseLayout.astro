@@ -22,7 +22,7 @@ const path = Astro.url.pathname;
     })();
   </script>
 </head>
-<body>
+<body data-title-zh={titleZh || "首頁"} data-title-en={titleEn || "Home"}>
 <header class="site-header">
   <div class="nav-wrap shell">
     <a class="brand" href="/" aria-label="Shirley CHEN">
