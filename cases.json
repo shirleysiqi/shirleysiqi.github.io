@@ -1,0 +1,31 @@
+[
+  {
+    "id": "case-1788273558473-ov57pc",
+    "category": "media",
+    "categoryZh": "媒體活動",
+    "categoryEn": "Media Events",
+    "date": "2026.08",
+    "titleZh": "秋季策略會",
+    "titleEn": "Autumn Strategy Meeting",
+    "company": "",
+    "summaryZh": "",
+    "summaryEn": "",
+    "cover": {
+      "src": "/images/cases/case-1788273558473-ov57pc/_20260901223515_193_112.jpg",
+      "name": "_20260901223515_193_112.jpg"
+    },
+    "gallery": [],
+    "coverage": [
+      {
+        "id": "coverage-1788273300851-qh74cs",
+        "media": "明報",
+        "date": "08.31",
+        "titleZh": "海通國際：中美股指秋季料區間波動",
+        "titleEn": "",
+        "url": "https://news.mingpao.com/pns/%e7%b6%93%e6%bf%9f/article/20260831/s00004/1788106920767",
+        "screenshot": null
+      }
+    ],
+    "published": true
+  }
+]
