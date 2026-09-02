@@ -1,5 +1,37 @@
 [
   {
+    "id": "case-mtkc0v2r-n8z3oc",
+    "category": "media",
+    "categoryZh": "媒體活動",
+    "categoryEn": "Media Events",
+    "date": "2022.06",
+    "titleZh": "《大公報》創刊120週年活動",
+    "titleEn": "TA KUNG PAO 120TH ANNIVERSARY CELEBRATION",
+    "company": "",
+    "summaryZh": "陪同客戶公司出席《大公報》創刊120週年活動，協助處理現場對外聯絡及協調工作，包括安排客戶公司致賀花籃、現場溝通及相關公關事宜。",
+    "summaryEn": "",
+    "cover": {
+      "src": "/images/cases/case-mtkc0v2r-n8z3oc/cover.jpg",
+      "name": "cover.jpg"
+    },
+    "gallery": [
+      {
+        "src": "/images/cases/case-mtkc0v2r-n8z3oc/gallery-01.jpg",
+        "name": "gallery-01.jpg"
+      },
+      {
+        "src": "/images/cases/case-mtkc0v2r-n8z3oc/gallery-02.jpg",
+        "name": "gallery-02.jpg"
+      },
+      {
+        "src": "/images/cases/case-mtkc0v2r-n8z3oc/gallery-03.jpg",
+        "name": "gallery-03.jpg"
+      }
+    ],
+    "coverage": [],
+    "published": true
+  },
+  {
     "id": "case-mtiu3rv0-3dompn",
     "category": "media",
     "categoryZh": "媒體活動",
