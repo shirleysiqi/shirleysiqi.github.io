@@ -1,5 +1,41 @@
 [
   {
+    "id": "case-mtkcm7it-yus9uv",
+    "category": "esg",
+    "categoryZh": "ESG 及持份者參與",
+    "categoryEn": "ESG & Stakeholder Engagement",
+    "date": "2023.12",
+    "titleZh": "政府持份者項目匯報及交流｜2023",
+    "titleEn": "Government Stakeholder Project Briefing & Engagement | 2023",
+    "company": "",
+    "summaryZh": "組織及協調公司向渠務署等政府相關持份者進行現場項目匯報及交流，負責前期聯絡、匯報安排、現場協調及持份者溝通，協助公司展示項目進展及相關成果。",
+    "summaryEn": "Organised and coordinated on-site project briefings and engagement sessions with the Drainage Services Department and other relevant government stakeholders. Responsibilities included pre-event liaison, presentation arrangements, on-site coordination, and stakeholder engagement, supporting the company in presenting project progress and key achievements.",
+    "cover": {
+      "src": "/images/cases/case-mtkcm7it-yus9uv/cover.jpg",
+      "name": "cover.jpg"
+    },
+    "gallery": [
+      {
+        "src": "/images/cases/case-mtkcm7it-yus9uv/gallery-01.jpg",
+        "name": "gallery-01.jpg"
+      },
+      {
+        "src": "/images/cases/case-mtkcm7it-yus9uv/gallery-02.jpg",
+        "name": "gallery-02.jpg"
+      },
+      {
+        "src": "/images/cases/case-mtkcm7it-yus9uv/gallery-03.jpg",
+        "name": "gallery-03.jpg"
+      },
+      {
+        "src": "/images/cases/case-mtkcm7it-yus9uv/gallery-04.jpg",
+        "name": "gallery-04.jpg"
+      }
+    ],
+    "coverage": [],
+    "published": true
+  },
+  {
     "id": "case-mtkcc4xu-9d68y4",
     "category": "media",
     "categoryZh": "媒體活動",
