@@ -23,7 +23,10 @@
         "titleZh": "海通國際：中美股指秋季料區間波動",
         "titleEn": "",
         "url": "https://news.mingpao.com/pns/%e7%b6%93%e6%bf%9f/article/20260831/s00004/1788106920767/%e6%b5%b7%e9%80%9a%e5%9c%8b%e9%9a%9b-%e4%b8%ad%e7%be%8e%e8%82%a1%e6%8c%87%e7%a7%8b%e5%ad%a3%e6%96%99%e5%8d%80%e9%96%93%e6%b3%a2%e5%8b%95#goog_rewarded",
-        "screenshot": null
+        "screenshot": {
+          "src": "/images/cases/case-mtiu3rv0-3dompn/coverage-01.jpg",
+          "name": "coverage-01.jpg"
+        }
       },
       {
         "id": "coverage-mtiu6wkt-ritbbr",
@@ -44,7 +47,22 @@
         "titleZh": "海通國際: AI浪潮開啟下半場 聚焦應用",
         "titleEn": "",
         "url": "https://epaper.tkww.hk/a/202608/28/AP6a909d62e4b099d2ba498572.html",
-        "screenshot": null
+        "screenshot": {
+          "src": "/images/cases/case-mtiu3rv0-3dompn/coverage-03.jpg",
+          "name": "coverage-03.jpg"
+        }
+      },
+      {
+        "id": "coverage-mtkayzt8-ztx3xu",
+        "media": "大公報",
+        "date": "08.28",
+        "titleZh": "內企出海新階段 由產品轉向生態",
+        "titleEn": "",
+        "url": "https://epaper.tkww.hk/a/202608/28/AP6a909d59e4b099d2ba498571.html",
+        "screenshot": {
+          "src": "/images/cases/case-mtiu3rv0-3dompn/coverage-04.jpg",
+          "name": "coverage-04.jpg"
+        }
       }
     ],
     "published": true
