@@ -1,15 +1,51 @@
 [
   {
+    "id": "case-mtkcc4xu-9d68y4",
+    "category": "media",
+    "categoryZh": "媒體活動",
+    "categoryEn": "Media Events",
+    "date": "2022.12",
+    "titleZh": "客戶公司年度業績發布會｜2022",
+    "titleEn": "Client Annual Results Presentation｜2022",
+    "company": "",
+    "summaryZh": "協助客戶公司完成年度業績發布會的策劃與執行，負責媒體邀請及聯絡、管理層Q&A材料準備、活動流程統籌、現場協調及媒體溝通等工作。",
+    "summaryEn": "Assisted in the planning and execution of the client’s annual results presentation, including media invitations and liaison, preparation of management Q&A materials, event coordination, on-site support, and media communications.",
+    "cover": {
+      "src": "/images/cases/case-mtkcc4xu-9d68y4/cover.jpg",
+      "name": "cover.jpg"
+    },
+    "gallery": [
+      {
+        "src": "/images/cases/case-mtkcc4xu-9d68y4/gallery-01.jpg",
+        "name": "gallery-01.jpg"
+      },
+      {
+        "src": "/images/cases/case-mtkcc4xu-9d68y4/gallery-02.jpg",
+        "name": "gallery-02.jpg"
+      },
+      {
+        "src": "/images/cases/case-mtkcc4xu-9d68y4/gallery-03.jpg",
+        "name": "gallery-03.jpg"
+      },
+      {
+        "src": "/images/cases/case-mtkcc4xu-9d68y4/gallery-04.jpg",
+        "name": "gallery-04.jpg"
+      }
+    ],
+    "coverage": [],
+    "published": true
+  },
+  {
     "id": "case-mtkc0v2r-n8z3oc",
     "category": "media",
     "categoryZh": "媒體活動",
     "categoryEn": "Media Events",
     "date": "2022.06",
-    "titleZh": "《大公報》創刊120週年活動",
-    "titleEn": "TA KUNG PAO 120TH ANNIVERSARY CELEBRATION",
+    "titleZh": "《大公報》創刊120週年活動｜2022",
+    "titleEn": "TA KUNG PAO 120TH ANNIVERSARY CELEBRATION｜2022",
     "company": "",
     "summaryZh": "陪同客戶公司出席《大公報》創刊120週年活動，協助處理現場對外聯絡及協調工作，包括安排客戶公司致賀花籃、現場溝通及相關公關事宜。",
-    "summaryEn": "",
+    "summaryEn": "Accompanied the client company to Ta Kung Pao’s 120th Anniversary Celebration and assisted with external liaison and on-site coordination, including arranging congratulatory floral displays on behalf of the client, facilitating on-site communications, and handling related public relations matters.",
     "cover": {
       "src": "/images/cases/case-mtkc0v2r-n8z3oc/cover.jpg",
       "name": "cover.jpg"
@@ -36,12 +72,12 @@
     "category": "media",
     "categoryZh": "媒體活動",
     "categoryEn": "Media Events",
-    "date": "",
-    "titleZh": "2026秋季策略會",
-    "titleEn": "Autumn Strategy Meeting",
+    "date": "2026.08",
+    "titleZh": "2026秋季策略會｜2026",
+    "titleEn": "Autumn Strategy Meeting｜2026",
     "company": "",
     "summaryZh": "主導「2026秋季策略會」媒體邀約工作，成功邀請 16 家媒體共 17 位記者出席，吸引《大公報》、《明報》、《東方日報》及新浪財經（香港）等媒體報導，有效提升品牌聲量。",
-    "summaryEn": "",
+    "summaryEn": "Led media outreach for the “2026 Autumn Strategy Conference,” successfully securing attendance from 17 journalists representing 16 media outlets. The event received coverage from leading media including Ta Kung Pao, Ming Pao, Oriental Daily News, and Sina Finance Hong Kong, effectively enhancing brand visibility and media exposure.",
     "cover": {
       "src": "/images/cases/case-mtiu3rv0-3dompn/cover.jpg",
       "name": "cover.jpg"
