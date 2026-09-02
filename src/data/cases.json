@@ -1,5 +1,41 @@
 [
   {
+    "id": "case-mtkcunpq-4ftuz7",
+    "category": "esg",
+    "categoryZh": "ESG 及持份者參與",
+    "categoryEn": "ESG & Stakeholder Engagement",
+    "date": "2023",
+    "titleZh": "廢棄 Banner 升級再造計劃",
+    "titleEn": "Banner Upcycling Initiative",
+    "company": "",
+    "summaryZh": "將廢棄宣傳 Banner 重新設計及升級再造成可重複使用的實用物品，延長物料生命週期並減少資源浪費。透過創意再生方式實踐循環經濟理念，將可持續發展融入日常營運及品牌實踐。",
+    "summaryEn": "Repurposed discarded promotional banners into practical, reusable items, extending the lifecycle of materials and reducing waste. The initiative put circular economy principles into practice through creative upcycling, integrating sustainability into everyday operations and brand initiatives.",
+    "cover": {
+      "src": "/images/cases/case-mtkcunpq-4ftuz7/cover.jpg",
+      "name": "cover.jpg"
+    },
+    "gallery": [
+      {
+        "src": "/images/cases/case-mtkcunpq-4ftuz7/gallery-01.jpg",
+        "name": "gallery-01.jpg"
+      },
+      {
+        "src": "/images/cases/case-mtkcunpq-4ftuz7/gallery-02.jpg",
+        "name": "gallery-02.jpg"
+      },
+      {
+        "src": "/images/cases/case-mtkcunpq-4ftuz7/gallery-03.jpg",
+        "name": "gallery-03.jpg"
+      },
+      {
+        "src": "/images/cases/case-mtkcunpq-4ftuz7/gallery-04.jpg",
+        "name": "gallery-04.jpg"
+      }
+    ],
+    "coverage": [],
+    "published": true
+  },
+  {
     "id": "case-mtkcm7it-yus9uv",
     "category": "esg",
     "categoryZh": "ESG 及持份者參與",
