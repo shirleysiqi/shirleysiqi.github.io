@@ -1,10 +1,82 @@
 [
   {
+    "id": "case-mtkden89-j1gl33",
+    "category": "media",
+    "categoryZh": "媒體活動",
+    "categoryEn": "Media Events",
+    "date": "2022",
+    "titleZh": "疫情期間股東週年大會（AGM）｜2022",
+    "titleEn": "Annual General Meeting (AGM) During COVID-19 | 2022",
+    "company": "",
+    "summaryZh": "於疫情期間協助客戶公司籌辦股東週年大會（AGM），統籌及執行現場安排，包括社交距離措施、場地人流管理及「安心出行」等防疫要求，在符合當時防疫規定的前提下，協助大會安全有序進行。",
+    "summaryEn": "Supported the planning and execution of a client’s Annual General Meeting (AGM) during the COVID-19 pandemic, coordinating on-site arrangements including social distancing measures, crowd management, and LeaveHomeSafe requirements. Helped ensure the meeting was conducted safely and smoothly in accordance with the prevailing public health requirements.",
+    "cover": {
+      "src": "/images/cases/case-mtkden89-j1gl33/cover.jpg",
+      "name": "cover.jpg"
+    },
+    "gallery": [
+      {
+        "src": "/images/cases/case-mtkden89-j1gl33/gallery-01.jpg",
+        "name": "gallery-01.jpg"
+      },
+      {
+        "src": "/images/cases/case-mtkden89-j1gl33/gallery-02.jpg",
+        "name": "gallery-02.jpg"
+      }
+    ],
+    "coverage": [],
+    "published": true
+  },
+  {
+    "id": "case-mtkdci6c-wl22dt",
+    "category": "esg",
+    "categoryZh": "ESG 及持份者參與",
+    "categoryEn": "ESG & Stakeholder Engagement",
+    "date": "2021",
+    "titleZh": "南丫島海岸清潔行動",
+    "titleEn": "Lamma Island Coastal Clean-up",
+    "company": "",
+    "summaryZh": "參與由多家中資機構共同支持的南丫島海岸清潔活動，與企業義工一同清理沿岸垃圾及廢棄物，以實際行動支持海洋環境保護，並提升社區對減廢及環境可持續發展的關注。",
+    "summaryEn": "Participated in a coastal clean-up on Lamma Island alongside volunteers from various Chinese enterprises, helping remove litter and waste from the shoreline. The initiative supported marine conservation while promoting greater awareness of waste reduction and environmental sustainability.",
+    "cover": {
+      "src": "/images/cases/case-mtkdci6c-wl22dt/cover.jpg",
+      "name": "cover.jpg"
+    },
+    "gallery": [
+      {
+        "src": "/images/cases/case-mtkdci6c-wl22dt/gallery-01.jpg",
+        "name": "gallery-01.jpg"
+      },
+      {
+        "src": "/images/cases/case-mtkdci6c-wl22dt/gallery-02.jpg",
+        "name": "gallery-02.jpg"
+      },
+      {
+        "src": "/images/cases/case-mtkdci6c-wl22dt/gallery-03.jpg",
+        "name": "gallery-03.jpg"
+      },
+      {
+        "src": "/images/cases/case-mtkdci6c-wl22dt/gallery-04.jpg",
+        "name": "gallery-04.jpg"
+      },
+      {
+        "src": "/images/cases/case-mtkdci6c-wl22dt/gallery-05.jpg",
+        "name": "gallery-05.jpg"
+      },
+      {
+        "src": "/images/cases/case-mtkdci6c-wl22dt/gallery-06.jpg",
+        "name": "gallery-06.jpg"
+      }
+    ],
+    "coverage": [],
+    "published": true
+  },
+  {
     "id": "case-mtkd2k9v-9veu3f",
     "category": "esg",
     "categoryZh": "ESG 及持份者參與",
     "categoryEn": "ESG & Stakeholder Engagement",
-    "date": "",
+    "date": "2023",
     "titleZh": "咖啡渣再生 × 社區共融計劃",
     "titleEn": "Coffee Grounds Upcycling & Social Inclusion Initiative",
     "company": "",
