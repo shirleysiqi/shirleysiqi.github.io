@@ -1,5 +1,33 @@
 [
   {
+    "id": "case-mtkcyatt-n9ppkb",
+    "category": "esg",
+    "categoryZh": "ESG 及持份者參與",
+    "categoryEn": "ESG & Stakeholder Engagement",
+    "date": "2023",
+    "titleZh": "長者社區膳食支援義工服務",
+    "titleEn": "Community Meal Support for the Elderly",
+    "company": "",
+    "summaryZh": "於長沙灣參與非牟利機構的社區義工服務，協助為行動不便及日常煮食有困難的長者準備及派送膳食，為有需要的長者提供基本生活支援與關懷，以實際行動參與社區服務。",
+    "summaryEn": "Volunteered with a non-profit organisation in Cheung Sha Wan to support elderly residents with limited mobility or difficulties preparing meals independently. Assisted with meal preparation and distribution, providing practical support and care to elderly members of the local community.",
+    "cover": {
+      "src": "/images/cases/case-mtkcyatt-n9ppkb/cover.jpg",
+      "name": "cover.jpg"
+    },
+    "gallery": [
+      {
+        "src": "/images/cases/case-mtkcyatt-n9ppkb/gallery-01.jpg",
+        "name": "gallery-01.jpg"
+      },
+      {
+        "src": "/images/cases/case-mtkcyatt-n9ppkb/gallery-02.jpg",
+        "name": "gallery-02.jpg"
+      }
+    ],
+    "coverage": [],
+    "published": true
+  },
+  {
     "id": "case-mtkcunpq-4ftuz7",
     "category": "esg",
     "categoryZh": "ESG 及持份者參與",
