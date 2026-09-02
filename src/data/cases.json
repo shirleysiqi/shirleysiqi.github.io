@@ -1,5 +1,37 @@
 [
   {
+    "id": "case-mtkd2k9v-9veu3f",
+    "category": "esg",
+    "categoryZh": "ESG 及持份者參與",
+    "categoryEn": "ESG & Stakeholder Engagement",
+    "date": "",
+    "titleZh": "咖啡渣再生 × 社區共融計劃",
+    "titleEn": "Coffee Grounds Upcycling & Social Inclusion Initiative",
+    "company": "",
+    "summaryZh": "與一間致力推動共融就業、為 SEN 人士提供工作機會的 NGO 咖啡店合作，將日常營運產生的咖啡渣再生成植物培植土，搭配種子供顧客認領及栽種。透過連結綠色消費、資源循環與共融就業，讓環境可持續發展與社會價值融入日常生活。",
+    "summaryEn": "Partnered with an NGO café dedicated to inclusive employment and providing job opportunities for individuals with special educational needs (SEN). Used coffee grounds from the café were repurposed into a growing medium and paired with seeds for customers to take home and grow, connecting green consumption and resource circularity with social inclusion.",
+    "cover": {
+      "src": "/images/cases/case-mtkd2k9v-9veu3f/cover.jpg",
+      "name": "cover.jpg"
+    },
+    "gallery": [
+      {
+        "src": "/images/cases/case-mtkd2k9v-9veu3f/gallery-01.jpg",
+        "name": "gallery-01.jpg"
+      },
+      {
+        "src": "/images/cases/case-mtkd2k9v-9veu3f/gallery-02.jpg",
+        "name": "gallery-02.jpg"
+      },
+      {
+        "src": "/images/cases/case-mtkd2k9v-9veu3f/gallery-03.jpg",
+        "name": "gallery-03.jpg"
+      }
+    ],
+    "coverage": [],
+    "published": true
+  },
+  {
     "id": "case-mtkcyatt-n9ppkb",
     "category": "esg",
     "categoryZh": "ESG 及持份者參與",
